@@ -1,0 +1,78 @@
+Idea 1:
+Some sort of GUI-based debugger/static analysis tool, for 
+security analysis, and possibly low-level performance 
+analysis
+
+I've talked to several members of the RPI security club, 
+who say that the tool sounds most similar to IDA 
+(http://en.wikipedia.org/wiki/Interactive_Disassembler), 
+which is proprietary (closed-source) and somewhat similar 
+to radare (http://en.wikipedia.org/wiki/Radare2), which is 
+open-source (LGPL), but command-line only. There was also 
+mention of DynamoRIO (http://en.wikipedia.org/wiki/DynamoRIO),
+ an open-source (BSD) library for dynamic instrumentation 
+(which likely has mechanisms for reading executable 
+formats, which saves us time working on a parser for those).
+
+One possible approach is to build a graphical front-end to 
+the open-source static-analysis suite radare. This would 
+likely yield a useful tool quickly, but would not involve 
+as much learning about {compiler optimization, static 
+analysis}-types of algorithms as originally anticipated.
+
+If learning about compiler internals is deemed a worthwhile 
+goal (higher priority than making an immediately useful 
+product), either contributing analysis algorithms to 
+radare, or building a similar, integrated tool from scratch 
+(depending on whether contributing to pre-existing 
+open-source projects is within the scope of this class) 
+seem to be the obvious approaches.
+
+If done from scratch, it would likely need:
+  - a parser for PE(windows) or ELF(linux) format executables
+  - some sort of internal representation/organization of the machine code (basic blocks?)
+  - algorithms that take the machine code and produce things such as:
+  -- which registers are modified by which blocks
+  -- a graph of how the blocks of machine code call each other
+  -- et cetera
+  - polished and accessable visualizations of the output of 
+    the algorithms (this may be the primary/only thing to work 
+    on if we build a front-end to radare rather than starting 
+    from scratch)
+
+C++ would likely be the best fit for this project, to work with pre-existing libraries (that are in C).
+
+-----
+Idea 2:
+A GUI library (in the style of Qt/GTK/Swing) that, instead 
+of drawing widgets natively/locally, served HTML/JS/CSS (on 
+a specified port) that acted as a GUI
+
+I'd assume this would be useful for web-application 
+development, since it could be written in the same style as 
+a normal program, just swapping out the GUI library (at 
+link-time?) and having it automagically abstract the 
+generation of the HTML.
+
+Rough task breakdown:
+  - HTML/JS/CSS generator/generation utilities (probably 
+    anywhere from trivial to fairly involved, depending on how 
+    anti-brittle it needs to be), likely consisting of:
+  -- some widget rendering infrastructure (canvas element + JS?)
+  -- some way to communicate back to the server (websockets, probably)
+  -- something between basic positioning of the widgets, to 
+     the other extreme of shiny polish/a sense of seamless 
+     integrated-ness, made of CSS (probably interleaved with the 
+     other tasks; unless there's some Pattern to seperate the 
+     aspects?)
+  - A way to handle/transport data between client and 
+    server, in a convenient way (mimicing the relevant GUI 
+    toolkit/language idioms as close as possible); probably 
+    some kind of wrapper around websocket callbacks (Observer 
+    pattern relevant?)
+
+I'd prefer Java for this one, because:
+  - GTK is pure C, and this class is focused on Object-Orientation, so mimicing its C API may cause difficulty
+  - Qt isn't pure C++, it uses it's own preprocessor/metaprogramming infrastructure (something to do with signals and slots?)
+  - I'm most familiar with the Swing toolkit
+  - Since it's a JVM language, there's an option to use Scheme/Scala for prototyping, and then converting that to Java if Scheme/Scala isn't OO enough
