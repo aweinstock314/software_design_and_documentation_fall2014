@@ -1,4 +1,4 @@
-//import javax.swing.*;        
+import javax.swing.*;        
 
 public class HelloWorldWebSwing {
     /**
@@ -7,7 +7,7 @@ public class HelloWorldWebSwing {
      * event-dispatching thread.
      */
     private static void createAndShowGUI(int port) {
-        WebWidgetFactory wwf = WebWidgetFactory();
+        WebWidgetFactory wwf = new WebWidgetFactory();
         //Create and set up the window.
         //JFrame frame = new JFrame("HelloWorldSwing");
         WebJFrame frame = wwf.JFrame("HelloWorldSwing");
