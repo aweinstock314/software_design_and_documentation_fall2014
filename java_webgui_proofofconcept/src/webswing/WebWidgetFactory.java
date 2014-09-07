@@ -4,6 +4,7 @@ package webswing;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -23,14 +24,16 @@ import com.sun.net.httpserver.HttpServer;
 
 public class WebWidgetFactory implements HttpHandler
 {
-    private Object mainWidget = null;
+    private ArrayList<Object> widgets = new ArrayList<Object>();
     @Override
     public void handle(HttpExchange e) throws IOException
     {
         try
         {
             System.out.printf("Handling a request to %s\n", e.getRemoteAddress());
-            String response = (new HTMLEmissionVisitor()).visit(mainWidget);
+            HTMLEmissionVisitor emitter = new HTMLEmissionVisitor();
+            for(Object widget : widgets) { emitter.visit(widget); }
+            String response = emitter.getGeneratedHtml();
             e.sendResponseHeaders(200, response.length());
             PrintStream ps = new PrintStream(e.getResponseBody());
             ps.print(response);
@@ -60,8 +63,7 @@ public class WebWidgetFactory implements HttpHandler
     public WebJFrame JFrame(String title)
     {
         WebJFrame jf = new WebJFrame(title);
-        if(mainWidget != null) { ((WebJFrame)mainWidget).getContentPane().add(jf); }
-        else { mainWidget = jf; }
+        widgets.add(jf);
         return jf;
     }
     public WebJLabel JLabel(String val)

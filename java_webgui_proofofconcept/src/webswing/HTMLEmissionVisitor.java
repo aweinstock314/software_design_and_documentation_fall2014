@@ -7,7 +7,9 @@ import java.util.Arrays;
 
 public class HTMLEmissionVisitor
 {
-    public String visit(Object obj)
+    private StringBuilder bodyHTML = new StringBuilder();
+    private String title = "";
+    public void visit(Object obj)
     {
         Class<?> dynamicClassOfObj = obj.getClass();
         ArrayList<Class<?>> interfacesToTry = new ArrayList<Class<?>>();
@@ -20,10 +22,11 @@ public class HTMLEmissionVisitor
             {
                 try
                 {
-                    System.out.println(iface);
+                    //System.out.println(iface);
                     Method dynamicallyReleventVisit = this.getClass().getMethod("visit", iface);
-                    System.out.printf("Attempting to call %s\n", dynamicallyReleventVisit.toString());
-                    return (String)dynamicallyReleventVisit.invoke(this, obj);
+                    //System.out.printf("Attempting to call %s\n", dynamicallyReleventVisit.toString());
+                    dynamicallyReleventVisit.invoke(this, obj);
+                    return;
                 }
                 catch(NoSuchMethodException e) { continue; }
             }
@@ -33,8 +36,23 @@ public class HTMLEmissionVisitor
         catch(IllegalAccessException e) { throw new RuntimeException(e); }
         catch(InvocationTargetException e) { throw new RuntimeException(e); }
     }
-    public String visit(WebAwtComponent c)
+    public void visit(WebAwtComponent c)
     {
-        return c.generateHTML();
+        bodyHTML.append(c.generateHTML());
+    }
+    public void visit(WebJFrame jf)
+    {
+        title = jf.getTitle();
+        bodyHTML.append(jf.generateHTML());
+    }
+    public String getGeneratedHtml()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html><head><title>");
+        sb.append(title);
+        sb.append("</title></head><body>"); //TODO: script section (websockets, etc), css section (borders around frames, etc)
+        sb.append(bodyHTML.toString());
+        sb.append("</body></html>");
+        return sb.toString();
     }
 }
