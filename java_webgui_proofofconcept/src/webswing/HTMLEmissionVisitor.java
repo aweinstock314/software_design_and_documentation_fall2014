@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class HTMLEmissionVisitor
 {
     private StringBuilder bodyHTML = new StringBuilder();
+    private StringBuilder cssContent = new StringBuilder();
     private String title = "";
     public void visit(Object obj)
     {
@@ -39,18 +40,21 @@ public class HTMLEmissionVisitor
     public void visit(WebAwtComponent c)
     {
         bodyHTML.append(c.generateHTML());
+        cssContent.append(c.generateCSS());
     }
     public void visit(WebJFrame jf)
     {
         title = jf.getTitle();
-        bodyHTML.append(jf.generateHTML());
+        visit((WebAwtComponent)jf);
     }
     public String getGeneratedHtml()
     {
         StringBuilder sb = new StringBuilder();
         sb.append("<html><head><title>");
         sb.append(title);
-        sb.append("</title></head><body>"); //TODO: script section (websockets, etc), css section (borders around frames, etc)
+        sb.append("</title><style>");
+        sb.append(cssContent.toString());
+        sb.append("</style></head><body>"); //TODO: script section (websockets, etc), css section (borders around frames, etc)
         sb.append(bodyHTML.toString());
         sb.append("</body></html>");
         return sb.toString();

@@ -7,7 +7,7 @@ public class WebJLabel extends WebAwtComponent
     {
         StringBuilder sb = new StringBuilder();
         //TODO: either escape or verify as balanced the labeldata
-        sb.append(String.format("<span id=\"%d\">%s</span>", getID(), labeldata));
+        sb.append(String.format("<span id=\"%s\">%s</span>", getID(), labeldata));
         return sb.toString();
     }
     public WebJLabel(String val) { labeldata = val; }

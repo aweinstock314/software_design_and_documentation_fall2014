@@ -15,13 +15,19 @@ public class WebJFrame extends WebAwtComponent
         /*sb.append("<html><head><title>");
         sb.append(frameTitle); //TODO: escaping?
         sb.append("</title></head><body>");*/
-        sb.append(String.format("<div id=\"%d\">", getID()));
+        sb.append(String.format("<div id=\"%s\">", getID()));
         for(WebAwtComponent c : frameContent)
         {
             sb.append(c.generateHTML());
         }
         sb.append("</div>");
         sb.append("</html>");
+        return sb.toString();
+    }
+    public String generateCSS()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("#%s {border: 2px solid; border-radius: 10px;}", getID()));
         return sb.toString();
     }
     //TODO: more constructors
