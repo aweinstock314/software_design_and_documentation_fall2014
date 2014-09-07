@@ -1,4 +1,4 @@
-.PHONY: all alljavastuff clean
+.PHONY: all alljavastuff clean run
 SOURCENAMES=$$(find src/ -name '*.java')
 
 all: alljavastuff
@@ -11,3 +11,6 @@ bin/:
 
 clean:
 	rm -r bin/
+
+rundemo: alljavastuff
+	java -cp bin/ HelloWorldWebSwing
