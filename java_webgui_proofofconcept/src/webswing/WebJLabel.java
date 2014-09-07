@@ -1,3 +1,5 @@
+package webswing;
+
 public class WebJLabel extends WebAwtComponent
 {
     private String labeldata = "";

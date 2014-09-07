@@ -1,3 +1,5 @@
+package webswing;
+
 public abstract class WebAwtComponent
 {
     // ID mechanics to allow referring to specific components for JS/CSS

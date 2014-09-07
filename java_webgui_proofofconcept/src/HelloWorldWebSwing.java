@@ -1,4 +1,5 @@
-import javax.swing.*;        
+import javax.swing.JFrame; //still needed for the JFrame.EXIT_ON_CLOSE constant
+import webswing.*;
 
 public class HelloWorldWebSwing {
     /**

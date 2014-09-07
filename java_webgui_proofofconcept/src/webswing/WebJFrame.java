@@ -1,3 +1,5 @@
+package webswing;
+
 import java.util.ArrayList;
 
 public class WebJFrame extends WebAwtComponent
@@ -23,7 +25,7 @@ public class WebJFrame extends WebAwtComponent
     public WebJFrame(String title) { frameTitle = title; }
     public class ContentPane
     {
-        void add(WebAwtComponent c) { frameContent.add(c); }
+        public void add(WebAwtComponent c) { frameContent.add(c); }
     }
     private ContentPane frameContentPane = new ContentPane();
     public ContentPane getContentPane() { return frameContentPane; }
