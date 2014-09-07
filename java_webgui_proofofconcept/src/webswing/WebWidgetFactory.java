@@ -8,7 +8,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-class HelloWorldResponse implements HttpHandler
+/*class HelloWorldResponse implements HttpHandler
 {
     @Override
     public void handle(HttpExchange e) throws IOException
@@ -19,20 +19,25 @@ class HelloWorldResponse implements HttpHandler
         ps.println("<html><head><title>Hello world web page</title></head><body>Hello, World!</body></html>");
         e.close();
     }
-}
+}*/
 
 public class WebWidgetFactory implements HttpHandler
 {
-    private WebAwtComponent mainWidget = null;
+    private Object mainWidget = null;
     @Override
     public void handle(HttpExchange e) throws IOException
     {
-        System.out.printf("Handling a request to %s\n", e.getRemoteAddress());
-        String response = mainWidget.generateHTML();
-        e.sendResponseHeaders(200, response.length());
-        PrintStream ps = new PrintStream(e.getResponseBody());
-        ps.print(response);
-        e.close();
+        try
+        {
+            System.out.printf("Handling a request to %s\n", e.getRemoteAddress());
+            String response = (new HTMLEmissionVisitor()).visit(mainWidget);
+            e.sendResponseHeaders(200, response.length());
+            PrintStream ps = new PrintStream(e.getResponseBody());
+            ps.print(response);
+            e.close();
+        }
+        catch(IOException ex) { throw ex; }
+        catch(Exception ex) { ex.printStackTrace(); }
     }
     public WebWidgetFactory() {}
     public void beginServing(final int port)
