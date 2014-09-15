@@ -1,0 +1,42 @@
+- Some software to serve the HTML/CSS/JS that the site 
+consists of; We already have an outline for this using 
+Java's "com.sun.net.httpserver.HttpServer" object. Popular 
+frameworks such as Rails/Django would fit in this catagory, 
+but it seems that the team has more Java experience, and 
+such frameworks likely require a nontrivial time investment 
+to utilize. Apache likely has some subproject that might 
+offer a more featureful middle-ground that might not be too 
+heavy.
+
+- Some sort of database infrastructure for storing both 
+event data and account credentials. I'm not very fluent in 
+this area, but I've heard that SQLite is a lightweight 
+text-based database that's useful for development (not too 
+resource-intensive to quickly spin up for testing), while 
+postgresql is a more heavyweight/robust/performant database 
+server.
+
+- Crawling/scraping sites to obtain event data is one of 
+the necessary components. It'll probably start out as 
+manually looking at the structure of a specific site 
+(Union's website?), and hard-coding rules for it (regex/DOM 
+treewalk/prolog are potential options; DOM treewalk with 
+JSOUP is probably the best robustness per cost). At its 
+most sophisticated, this may stray into NLP/IE techniques 
+to extract event data from arbitrary websites (but that 
+falls under the 'bells & whistles' catagory).
+
+- Account creation/management infrastructure: The 
+conventional wisdom is that it's a horrible idea, 
+security-wise, to go with a home-made/in-house account 
+system, so looking into pre-existing libraries would likely 
+be the sanest thing to do, assuming that this is to be a 
+serious product. That said, it would be fun to try to 
+implement it ourselves out of databases & crypto libraries.
+
+- If we end up having a feature to submit events directly, 
+some sort of filtering would be nice to remove or 
+automatically flag-for-review "spammy"/useless events. One 
+machine learning library that was recommended to me is 
+called "Weka", although this would also likely be a fun set 
+of algorithms to implement.
