@@ -7,6 +7,10 @@ such frameworks likely require a nontrivial time investment
 to utilize. Apache likely has some subproject that might 
 offer a more featureful middle-ground that might not be too 
 heavy.
+-- Research Apache projects that serve java code (Tomcat?) (2 days)
+-- Make an interface between other backend components and 
+    the server (2 weeks? depends on the shape of the rest of 
+    the program)
 
 - Some sort of database infrastructure for storing both 
 event data and account credentials. I'm not very fluent in 
@@ -15,6 +19,9 @@ text-based database that's useful for development (not too
 resource-intensive to quickly spin up for testing), while 
 postgresql is a more heavyweight/robust/performant database 
 server.
+-- Choose a database (1 day)
+-- Setup database (10 days)
+-- Create event storage mechanism (4 days)
 
 - Crawling/scraping sites to obtain event data is one of 
 the necessary components. It'll probably start out as 
@@ -25,6 +32,9 @@ JSOUP is probably the best robustness per cost). At its
 most sophisticated, this may stray into NLP/IE techniques 
 to extract event data from arbitrary websites (but that 
 falls under the 'bells & whistles' catagory).
+-- Make a simple scraper using JSOUP to pull events from 
+    union.rpi.edu and store them in the database (1 week)
+-- Search for other sites that have relevant events to pull (2 days)
 
 - Account creation/management infrastructure: The 
 conventional wisdom is that it's a horrible idea, 
@@ -33,6 +43,8 @@ system, so looking into pre-existing libraries would likely
 be the sanest thing to do, assuming that this is to be a 
 serious product. That said, it would be fun to try to 
 implement it ourselves out of databases & crypto libraries.
+-- Research java account libraries (2 days)
+-- Setup the chosen account library, integrate it with the database (1-2 weeks)
 
 - If we end up having a feature to submit events directly, 
 some sort of filtering would be nice to remove or 
@@ -40,3 +52,8 @@ automatically flag-for-review "spammy"/useless events. One
 machine learning library that was recommended to me is 
 called "Weka", although this would also likely be a fun set 
 of algorithms to implement.
+-- Run some events through an arbitrary machine learning 
+    algorithm, once we have events (1 day)
+-- If the output looks promising (not too many false 
+    positives), integrate the machine learning with the event 
+    submission (1 week)
