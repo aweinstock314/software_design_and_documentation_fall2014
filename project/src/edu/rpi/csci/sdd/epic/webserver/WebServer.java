@@ -1,6 +1,7 @@
 package edu.rpi.csci.sdd.epic.webserver;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,22 +30,56 @@ public class WebServer implements HttpHandler
             System.out.printf("Handling a request to %s\n", e.getRemoteAddress());
             String requestPath = e.getRequestURI().getPath();
             System.out.printf("Request URI: \"%s\"\n", requestPath);
-            //String response = "<html><head><title>Hello</title></head><body>world</body></html>";
-            File fileToServe = new File(directoryToServe, requestPath);
-            String response = slurpFile(fileToServe);
-            int code = 200;
-            if(response == null)
-            {
-                code = 404;
-                response = slurpFile(new File(directoryToServe, "notfound404.html")).replace("$REQUESTED_PAGE", "epic.server.name:"+port+requestPath);
-            }
-            e.sendResponseHeaders(code, response.length());
-            PrintStream ps = new PrintStream(e.getResponseBody());
-            ps.print(response);
-            e.close();
+            String[] contentPtr = new String[1];
+            int[] codePtr = new int[1];
+            Exception ex = getContentToServe(requestPath, contentPtr, codePtr);
+            if(ex == null) { serveString(e, codePtr[0], contentPtr[0]); }
+            else { serveInternalError(e, ex); }
         }
         catch(IOException ex) { ex.printStackTrace(); throw ex; }
-        catch(Exception ex) { ex.printStackTrace(); }
+        finally { e.close(); }
+    }
+    protected void serveString(HttpExchange e, int code, String s) throws IOException
+    {
+        e.sendResponseHeaders(code, s.length());
+        PrintStream ps = new PrintStream(e.getResponseBody());
+        ps.print(s);
+    }
+    protected String throwableToString(Throwable t)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        t.printStackTrace(new PrintStream(baos));
+        return baos.toString();
+    }
+    protected void serveInternalError(HttpExchange exchange, Exception exception) throws IOException
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html><head><title>Error 500 - Internal Error</title></head><body>");
+        sb.append("An internal error occurred: <br /><pre>\n");
+        sb.append(throwableToString(exception));
+        sb.append("\n</pre></body></html>");
+        serveString(exchange, 500, sb.toString());
+    }
+    protected Exception getContentToServe(String requestPath, String[] outContent, int[] outCode)
+    {
+        Exception ex = null;
+        try
+        {
+            File fileToServe = new File(directoryToServe, requestPath);
+            outContent[0] = slurpFile(fileToServe);
+            outCode[0] = 200;
+            if(outContent[0] == null)
+            {
+                outCode[0] = 404;
+                outContent[0] = slurpFile(new File(directoryToServe, "notfound404.html")).replace("$REQUESTED_PAGE", "epic.server.name:"+port+requestPath);
+            }
+        }
+        catch(Exception e)
+        {
+            ex = e;
+            e.printStackTrace();
+        }
+        return ex;
     }
     protected String slurpFile(File f) throws IOException
     {
