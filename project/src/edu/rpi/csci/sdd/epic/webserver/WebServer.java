@@ -1,15 +1,13 @@
 package edu.rpi.csci.sdd.epic.webserver;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import edu.rpi.csci.sdd.epic.util.Util;
 
 public class WebServer implements HttpHandler
 {
@@ -45,18 +43,12 @@ public class WebServer implements HttpHandler
         PrintStream ps = new PrintStream(e.getResponseBody());
         ps.print(s);
     }
-    protected String throwableToString(Throwable t)
-    {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        t.printStackTrace(new PrintStream(baos));
-        return baos.toString();
-    }
     protected void serveInternalError(HttpExchange exchange, Exception exception) throws IOException
     {
         StringBuilder sb = new StringBuilder();
         sb.append("<html><head><title>Error 500 - Internal Error</title></head><body>");
         sb.append("An internal error occurred: <br /><pre>\n");
-        sb.append(throwableToString(exception));
+        sb.append(Util.throwableToString(exception));
         sb.append("\n</pre></body></html>");
         serveString(exchange, 500, sb.toString());
     }
@@ -66,12 +58,12 @@ public class WebServer implements HttpHandler
         try
         {
             File fileToServe = new File(directoryToServe, requestPath);
-            outContent[0] = slurpFile(fileToServe);
+            outContent[0] = Util.slurpFile(fileToServe);
             outCode[0] = 200;
             if(outContent[0] == null)
             {
                 outCode[0] = 404;
-                outContent[0] = slurpFile(new File(directoryToServe, "notfound404.html")).replace("$REQUESTED_PAGE", "epic.server.name:"+port+requestPath);
+                outContent[0] = Util.slurpFile(new File(directoryToServe, "notfound404.html")).replace("$REQUESTED_PAGE", "epic.server.name:"+port+requestPath);
             }
         }
         catch(Exception e)
@@ -80,16 +72,6 @@ public class WebServer implements HttpHandler
             e.printStackTrace();
         }
         return ex;
-    }
-    protected String slurpFile(File f) throws IOException
-    {
-        if(!f.exists()) { return null; }
-        BufferedReader r = new BufferedReader(new FileReader(f));
-        StringBuilder sb = new StringBuilder();
-        String tmp;
-        while((tmp = r.readLine()) != null) { sb.append(tmp); sb.append("\n"); }
-        r.close();
-        return sb.toString();
     }
     protected void beginServing()
     {
