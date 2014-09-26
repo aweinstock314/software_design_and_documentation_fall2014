@@ -1,0 +1,33 @@
+View events
+Actors: User
+Pre-condition: None
+Post-condition: Events are displayed to the user
+Steps:
+1. User indicates to the system that they intend to view events
+    1.1. If there are events:
+    1.2. If there are no events:
+        1.2.1. System indicates to the user that no events are available
+
+-----
+Sign in
+Actors: User
+Pre-condition: User knows credentials for an account that has been registered
+Post-condition: The interface indicates that the User is authenticated
+Steps:
+1. User indicates to the system that they intend to sign in
+2. System displays a form for authentication credentials
+3. User provides authentication credentials (e.g. username, password)
+4. User indicates to the system that they have finished providing the credentials
+    4.1. If the credentials provided in step 2. are valid:
+        4.1.1. System indicates success to the user
+    4.2. Else:
+        4.2.1. System indicates to the user that one or more of the provided credentials are invalid
+        4.2.2. User continues from step 3.
+-----
+Sign out
+
+Actors: User
+Pre-condition: User is authenticated
+Post-condition: User is notified that they have signed out
+Steps:
+1. User indicates to the system that they intend to sign out
