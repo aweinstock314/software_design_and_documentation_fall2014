@@ -1,6 +1,7 @@
 #!/usr/bin/env ocaml
 
 let tau = 8. *. (atan 1.);;
+let rad2deg theta = 360. *. theta /. tau;;
 
 let list_iter3 f lst =
     let rec aux prev = begin function
@@ -21,12 +22,17 @@ let emit_lines color points =
     ) points;
     Printf.printf ";\n%!";;
 
-let emit_textline (x1, y1) (x2, y2) str =
-    Printf.printf "\\draw (%f, %f) -- node[above]{%s} (%f, %f);" x1 y1 str x2 y2;;
-
 let apply_polar_movement (mag, theta) (x, y) =
     let (dx, dy) = ((mag *. (cos theta)), (mag *. (sin theta))) in
     (x +. dx, y +. dy);;
+
+let angle_between (x1, y1) (x2, y2) =
+    let (dx, dy) = (x2-.x1, y2-.y1) in
+    atan2 dy dx;;
+
+let emit_textline (x1, y1) (x2, y2) str =
+    let theta = rad2deg (angle_between (x1, y1) (x2, y2)) in
+    Printf.printf "\\draw[->] (%f, %f) -- node[above, rotate=%f]{%s} (%f, %f);\n%!" x1 y1 theta str x2 y2;;
 
 let emit_text color (x, y) str =
     Printf.printf "\\draw[color=%s] (%f, %f) node[right]{%s};\n%!" color x y str;;
