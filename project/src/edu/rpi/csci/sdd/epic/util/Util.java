@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+
+import java.sql.*;
 
 public class Util
 {
@@ -24,5 +27,19 @@ public class Util
         while((tmp = r.readLine()) != null) { sb.append(tmp); sb.append("\n"); }
         r.close();
         return sb.toString();
+    }
+    public static ArrayList<String> getUsersTable() throws SQLException
+    {
+        ArrayList<String> results = new ArrayList();
+        Connection db = DriverManager.getConnection("jdbc:postgresql:epic_db", "avi", "password"); //TODO: find some solution for the password when NOT running locally
+        ResultSet rs = db.createStatement().executeQuery("SELECT * FROM USERS");
+        while(rs.next())
+        {
+            String username = rs.getString(1);
+            Boolean isEventProvider = rs.getBoolean(2);
+            String email = rs.getString(3);
+            results.add(String.format("(%s, %b, %s)", username, isEventProvider, email));
+        }
+        return results;
     }
 }
