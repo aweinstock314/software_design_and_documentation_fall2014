@@ -31,7 +31,8 @@ public class WebServer implements HttpHandler
             String[] contentPtr = new String[1];
             int[] codePtr = new int[1];
             Exception ex = getContentToServe(requestPath, contentPtr, codePtr);
-            if(ex == null) { serveString(e, codePtr[0], contentPtr[0]); }
+            SimpleTemplater templater = new SimpleTemplater();
+            if(ex == null) { serveString(e, codePtr[0], templater.template(contentPtr[0])); }
             else { serveInternalError(e, ex); }
         }
         catch(IOException ex) { ex.printStackTrace(); throw ex; }

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import java.sql.*;
 
@@ -41,5 +42,17 @@ public class Util
             results.add(String.format("(%s, %b, %s)", username, isEventProvider, email));
         }
         return results;
+    }
+    public static String joinList(List<String> lst, String with)
+    {
+        StringBuilder sb = new StringBuilder();
+        final int size = lst.size();
+        int idx = 0;
+        for(String s : lst)
+        {
+            sb.append(s);
+            if(++idx != size) { sb.append(with); }
+        }
+        return sb.toString();
     }
 }
