@@ -13,12 +13,14 @@ public class WebServer implements HttpHandler
 {
     protected final File directoryToServe;
     protected final int port;
+    protected final SimpleTemplater templater;
     public WebServer(File f, int p)
     {
         File dir = (f.isDirectory()) ? f : f.getParentFile();
         directoryToServe = dir;
         port = p;
         beginServing();
+        templater = new SimpleTemplater(port);
     }
     @Override
     public void handle(HttpExchange e) throws IOException
@@ -30,9 +32,8 @@ public class WebServer implements HttpHandler
             System.out.printf("Request URI: \"%s\"\n", requestPath);
             String[] contentPtr = new String[1];
             int[] codePtr = new int[1];
-            Exception ex = getContentToServe(requestPath, contentPtr, codePtr);
-            SimpleTemplater templater = new SimpleTemplater();
-            if(ex == null) { serveString(e, codePtr[0], templater.template(contentPtr[0])); }
+            Exception ex = getContentToServe(e, contentPtr, codePtr);
+            if(ex == null) { serveString(e, codePtr[0], templater.template(e, contentPtr[0])); }
             else { serveInternalError(e, ex); }
         }
         catch(IOException ex) { ex.printStackTrace(); throw ex; }
@@ -53,24 +54,25 @@ public class WebServer implements HttpHandler
         sb.append("\n</pre></body></html>");
         serveString(exchange, 500, sb.toString());
     }
-    protected Exception getContentToServe(String requestPath, String[] outContent, int[] outCode)
+    protected Exception getContentToServe(HttpExchange e, String[] outContent, int[] outCode)
     {
         Exception ex = null;
         try
         {
+            String requestPath = e.getRequestURI().getPath();
             File fileToServe = new File(directoryToServe, requestPath);
             outContent[0] = Util.slurpFile(fileToServe);
             outCode[0] = 200;
             if(outContent[0] == null)
             {
                 outCode[0] = 404;
-                outContent[0] = Util.slurpFile(new File(directoryToServe, "notfound404.html")).replace("$REQUESTED_PAGE", "epic.server.name:"+port+requestPath);
+                outContent[0] = templater.template(e, Util.slurpFile(new File(directoryToServe, "notfound404.html")));
             }
         }
-        catch(Exception e)
+        catch(Exception exc)
         {
-            ex = e;
-            e.printStackTrace();
+            ex = exc;
+            exc.printStackTrace();
         }
         return ex;
     }
