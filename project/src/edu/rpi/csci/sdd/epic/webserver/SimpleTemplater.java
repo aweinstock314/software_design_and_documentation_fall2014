@@ -1,11 +1,14 @@
 package edu.rpi.csci.sdd.epic.webserver;
 
+
 import com.sun.net.httpserver.HttpExchange;
+import edu.rpi.csci.sdd.epic.webserver.UserSessions;
 import edu.rpi.csci.sdd.epic.util.Util;
 
 public class SimpleTemplater
 {
     protected final int port;
+    protected UserSessions us = new UserSessions();
     public SimpleTemplater(int p)
     {
         port = p;
@@ -22,6 +25,10 @@ public class SimpleTemplater
             {
                 String requestPath = e.getRequestURI().getPath();
                 page = page.replace("<!--REQUESTED-PAGE-->", "epic.server.name:"+port+requestPath);
+            }
+            if(page.contains("<!--HANDLE-LOGIN-->"))
+            {
+                us.doLogin(e);
             }
         }
         catch(Exception ex) { ex.printStackTrace(); }
