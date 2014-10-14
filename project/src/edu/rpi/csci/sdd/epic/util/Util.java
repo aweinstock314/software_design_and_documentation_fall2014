@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.*;
+import javax.sql.DataSource;
+import org.postgresql.ds.PGSimpleDataSource;
 
 public class Util
 {
@@ -29,10 +31,16 @@ public class Util
         r.close();
         return sb.toString();
     }
+    public static DataSource getJDBCDataSource()
+    {
+        PGSimpleDataSource ds = new PGSimpleDataSource();
+        ds.setDatabaseName("epic_db");
+        return ds;
+    }
     public static ArrayList<String> getUsersTable() throws SQLException
     {
         ArrayList<String> results = new ArrayList();
-        Connection db = DriverManager.getConnection("jdbc:postgresql:epic_db", "avi", "password"); //TODO: find some solution for the password when NOT running locally
+        Connection db = getJDBCDataSource().getConnection("avi", "password"); //TODO: find some solution for the password when NOT running locally
         ResultSet rs = db.createStatement().executeQuery("SELECT * FROM USERS");
         while(rs.next())
         {
