@@ -8,7 +8,7 @@ import edu.rpi.csci.sdd.epic.util.Util;
 public class SimpleTemplater
 {
     protected final int port;
-    protected UserSessions us = new UserSessions();
+    //protected UserSessions us = new UserSessions();
     public SimpleTemplater(int p)
     {
         port = p;
@@ -28,7 +28,7 @@ public class SimpleTemplater
             }
             if(page.contains("<!--HANDLE-LOGIN-->"))
             {
-                us.doLogin(e);
+                //us.doLogin(e);
             }
         }
         catch(Exception ex) { ex.printStackTrace(); }

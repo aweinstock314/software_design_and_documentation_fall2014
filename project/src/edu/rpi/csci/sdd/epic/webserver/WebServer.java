@@ -85,6 +85,7 @@ public class WebServer implements HttpHandler
                 HttpServer serv = HttpServer.create(new InetSocketAddress(port), -1);
                 serv.start();
                 serv.createContext("/", outerThis);
+                serv.createContext("/needsauth/", outerThis).setAuthenticator(new UserSessions("realmname"));
                 System.out.printf("Bound to port %s\n", port);
             }
             catch(Exception e) {e.printStackTrace();}
@@ -93,6 +94,7 @@ public class WebServer implements HttpHandler
 
     public static void main(String[] args)
     {
+        UserSessions.setSecurityManager();
         WebServer ws = new WebServer(new File("web/"), 8000);
     }
 }
