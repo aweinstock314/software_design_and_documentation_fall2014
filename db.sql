@@ -104,7 +104,9 @@ ALTER TABLE public.user_tags OWNER TO postgres;
 CREATE TABLE users (
     id character varying(80),
     event_provider boolean,
-    email_address character varying(160)
+    email_address character varying(160),
+    username character varying(80),
+    password character varying(80)
 );
 
 

@@ -37,6 +37,13 @@ public class Util
         ds.setDatabaseName("epic_db");
         return ds;
     }
+    public static DataSource getJDBCDataSource(String username, String password)
+    {
+        PGSimpleDataSource ds = (PGSimpleDataSource)getJDBCDataSource();
+        ds.setUser(username);
+        ds.setPassword(password);
+        return ds;
+    }
     public static ArrayList<String> getUsersTable() throws SQLException
     {
         ArrayList<String> results = new ArrayList();

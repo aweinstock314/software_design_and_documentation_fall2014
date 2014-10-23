@@ -8,6 +8,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
@@ -30,6 +32,9 @@ public class UserSessions extends BasicAuthenticator
     {
         Factory<SecurityManager> factory = new IniSecurityManagerFactory("sample_accounts.ini");
         SecurityManager securityManager = factory.getInstance();
+        JdbcRealm databaseRealm = new JdbcRealm();
+        databaseRealm.setDataSource(Util.getJDBCDataSource("avi", "password"));
+        ((RealmSecurityManager)securityManager).setRealm(databaseRealm);
         SecurityUtils.setSecurityManager(securityManager);
     }
     protected Map<InetSocketAddress, Subject> addressSubjectMapping = new HashMap<InetSocketAddress, Subject>();
