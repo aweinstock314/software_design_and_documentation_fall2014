@@ -41,11 +41,11 @@ CREATE TABLE event_tags (
 ALTER TABLE public.event_tags OWNER TO postgres;
 
 --
--- Name: events; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+-- Name: events; Type: TABLE; Schema: public; Owner: mcguik2; Tablespace: 
 --
 
 CREATE TABLE events (
-    id integer,
+    id integer NOT NULL,
     host character varying(80),
     source character varying(80),
     creator character varying(80),
@@ -57,7 +57,28 @@ CREATE TABLE events (
 );
 
 
-ALTER TABLE public.events OWNER TO postgres;
+ALTER TABLE public.events OWNER TO mcguik2;
+
+--
+-- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: mcguik2
+--
+
+CREATE SEQUENCE events_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.events_id_seq OWNER TO mcguik2;
+
+--
+-- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mcguik2
+--
+
+ALTER SEQUENCE events_id_seq OWNED BY events.id;
+
 
 --
 -- Name: preference_sets; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -100,6 +121,13 @@ CREATE TABLE users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: mcguik2
+--
+
+ALTER TABLE ONLY events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
+
+
+--
 -- Data for Name: event_tags; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -108,11 +136,18 @@ COPY event_tags (eventid, tag) FROM stdin;
 
 
 --
--- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: mcguik2
 --
 
 COPY events (id, host, source, creator, recurring, starttime, endtime, location, on_campus) FROM stdin;
 \.
+
+
+--
+-- Name: events_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mcguik2
+--
+
+SELECT pg_catalog.setval('events_id_seq', 1, false);
 
 
 --
@@ -135,7 +170,7 @@ COPY user_tags (userid, tag) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY users (id, event_provider, email_address) FROM stdin;
+COPY users (id, event_provider, email_address, username, password) FROM stdin;
 \.
 
 
