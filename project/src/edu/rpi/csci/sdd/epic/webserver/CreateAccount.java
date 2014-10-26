@@ -1,8 +1,6 @@
 package edu.rpi.csci.sdd.epic.webserver;
 
 import java.util.Map;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 
 import edu.rpi.csci.sdd.epic.db.AccountModel;
 
@@ -11,7 +9,7 @@ public class CreateAccount extends PostRequestProcessor
     protected String processPostRequest(Map<String, String> postPairs) throws Exception
     {
         String id = postPairs.get("createaccount_id");
-        boolean event_provider = Boolean.valueOf(postPairs.get("createaccount_eventprovider"));
+        boolean event_provider = parseCheckbox(postPairs.get("createaccount_eventprovider"));
         String email_address = postPairs.get("createaccount_email_address");
         String username = postPairs.get("createaccount_username");
         String password = postPairs.get("createaccount_password");

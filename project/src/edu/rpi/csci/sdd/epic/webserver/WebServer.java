@@ -88,6 +88,7 @@ public class WebServer implements HttpHandler
                 serv.createContext("/needsauth/", outerThis).setAuthenticator(new UserSessions("epic_app"));
                 serv.createContext("/clearcreds", outerThis).setAuthenticator(new ClearAuthenticator("epic_app"));
                 serv.createContext("/createaccount", new CreateAccount());
+                serv.createContext("/createevent", new CreateEvent());
                 System.out.printf("Bound to port %s\n", port);
             }
             catch(Exception e) {e.printStackTrace();}
