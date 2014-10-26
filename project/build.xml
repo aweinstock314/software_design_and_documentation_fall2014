@@ -9,6 +9,7 @@
     <property name="dist"    location="dist"/>
 
     <path id="deps_classpath">
+        <pathelement path="dependencies/jsoup-1.8.1.jar" />
         <pathelement path="dependencies/hamcrest-core-1.3.jar" />
         <pathelement path="dependencies/junit-4.11.jar" />
         <pathelement path="dependencies/kawa-1.14.jar" />
