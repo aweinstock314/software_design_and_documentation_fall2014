@@ -1,0 +1,162 @@
+.head_title {
+	font-size: 28pt;
+	font-family: Arial;
+	margin-left: 4%;
+}
+
+.head_subtitle {
+	font-size: 14pt; 
+	font-family: Arial;
+	margin-left: 8%;
+}
+
+.left_bar {
+	float: left;
+	width: 20.5%;
+	height: 728px;
+}
+
+.signin_box {
+	border: 1px black solid;
+	margin: 5px;
+	height: 150px;
+	border-radius: 5px;
+	background-color: white;
+}
+
+.account_create_box {
+	border: 1px black solid;
+	margin: 5px;
+	height: 175px;
+	border-radius: 5px;
+	background-color: white;
+}
+
+.epic_checkbox {
+	margin-left: 10%; 
+	margin-top: 5px;
+	margin-bottom: 8px;
+}
+
+.hidden {
+	display: none;
+}
+
+.title_1 {
+	font-size: 16pt;
+	font-family: Arial;
+	margin-left: 10%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.form_low_margins {
+	margin-bottom: 5px;
+}
+
+.text_input {
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-bottom: 5px;
+	width: 78%;
+}
+
+.text_input.username {
+	margin-bottom: 10px;
+}
+
+.signin_links {
+	margin-left: 10%;
+}
+
+.right_link {
+	float: right;
+	margin-right: 13%;
+}
+
+.simple_margin {
+	margin: 10px;
+}
+
+.text_input.tag_entry {
+	margin-bottom: 5px;
+}
+
+.left_button {
+	margin-left: 22%;
+}
+
+.right_button {
+	margin-left: 10%;
+}
+
+.tag_list {
+	list-style-type: none;
+	margin: 5px;
+	max-height: 350px;
+	overflow-y: auto;
+}
+
+.calendar_section {
+	float: right;
+	width: 79%;
+	height: 600px;
+	padding-top: 3px;
+}
+
+.weekday_list {
+	height: 30px;
+	font-family: Arial;
+	font-size: 13;
+	background-color: white;
+	text-align: center;
+}
+
+.weekday_cell {
+	border: 1px black solid;
+	width: 158px;
+}
+
+.weekday_cell.timezone {
+	width: 89px;
+}
+
+.weekday_cell.timeslot {
+	width: 89px;
+	height: 41px;
+	text-align: right;
+}
+
+.calendar {
+	height: 600px;
+	overflow-y: scroll;
+	background-color: white;
+	border: 1px black solid;
+	width: 1243px;
+}
+
+.days {
+	font-family: Arial;
+	font-size: 13; 
+	background-color: white;
+	text-align: center;
+}
+
+.tag_margin {
+	margin: 10px 0px 10px 0px;
+}
+
+.tag {	
+	background-color: lightgrey;
+	padding: 3px;
+	font-family: Arial;
+	font-size: 12px;
+	border-radius: 3px;
+	border: 1px grey solid;
+}
+
+.remove_tag {
+	font-size: 16px;
+	padding-right: 3px;
+	padding-left: 3px;
+}

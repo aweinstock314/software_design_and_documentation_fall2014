@@ -1,0 +1,265 @@
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script language="javascript">
+
+var filters = [];
+
+function add_tag(press) {
+	// Check to see which key has been pressed.
+	var code = (press.keyCode ? press.keyCode : press.which);
+
+	// If enter key is pressed, add tag:
+	if (code == 13) {
+		// Create all new HTML elements to generate tag.
+		var new_tag = document.createElement("li");
+		var inner_tag = document.createElement("span");
+		var tag_id = document.getElementById("tag_add").value;
+		var tag_text = document.createTextNode(tag_id);
+		var tag_remove = document.createElement("span");
+		var remove_text = document.createTextNode("x");
+
+		// Set tag id for further manipulation.
+		new_tag.id = tag_id;
+
+		// Set css styling
+		new_tag.className = "tag_margin";
+		inner_tag.className = "tag";		
+		tag_remove.className = "remove_tag";
+		new_tag.onclick = function() {
+			// remove tag from global list of tags.
+			for(var i = filters.length - 1; i >= 0; i--) {
+			    if(filters[i] === this.id) {
+			       filters.splice(i, 1);
+			    }
+			}
+
+			this.parentNode.removeChild(this);
+		};
+
+		// Append to create html structure and add to document.
+		new_tag.appendChild(inner_tag);
+		inner_tag.appendChild(tag_text);
+		inner_tag.appendChild(tag_remove);
+		tag_remove.appendChild(remove_text);
+		$("#tag_list").append(new_tag);
+
+		// Reset add tag text field.
+		document.getElementById("tag_add").value = document.getElementById("tag_add").defaultValue;
+
+		// Add to list of tags for further manipulation.
+		filters.push(tag_id);
+	}
+}
+
+function swap_box() {
+	// toggle whether signin or signup boxes are displayed.
+	$("#signin_box").toggle();
+	$("#account_create_box").toggle();
+}
+
+function remove_tag(tag_id) {
+
+	// remove tag from document.
+	tag_list = document.getElementById(tag_list);
+	tag_to_remove = document.getElementById(tag_id);
+	tag_list.removeChild(tag_to_remove);
+}
+
+</script>
+<head>
+	<link rel="stylesheet" type="text/css" href="primary.css">
+	<div class="head_title">
+		EPIC - Encouraging Program Involvement around Campus
+	</div>
+	<div class="head_subtitle">
+		Search for events, or sign in to set your preferences!
+	</div>
+</head>
+
+<body style="background-color: #EEEEEE">
+	<div style="margin-top: 10px;">
+		<div class="left_bar">
+			<div id="signin_box" class="signin_box">
+				<div class="title_1">
+					Sign In
+				</div>
+				<hr class="simple_margin"/>
+				<form class="form_low_margins">
+					<input type="text" class="text_input username" placeholder="Username"/>
+					<input type="password" class="text_input password" placeholder="Password"/>
+				</form>
+				<div class="signin_links">
+					<a href="#" onclick="swap_box()">Sign Up</a>
+					<a href="#" class="right_link">Forgot your Password?</a>
+				</div>
+			</div>
+			<div id="account_create_box" class="account_create_box hidden">
+				<div class="title_1">
+					Create Account
+				</div>
+				<hr class="simple_margin"/>
+				<form class="form_low_margins" method="post" action="/createaccount">
+					<input type="text" class="text_input username" name="createaccount_username" placeholder="Username"/>
+					<input type="password" class="text_input password" name="createaccount_password" placeholder="Password"/>
+					<input type="checkbox" class="epic_checkbox" name="createaccount_event_provider">Are you an event provider?</input>
+					<button class="left_button" onclick="swap_box()"> 
+						Cancel
+					</button>
+					<button class="right_button">
+						Submit
+					</button>
+				</form>
+			</div>
+			<div class="filters simple_margin">
+				<div class="addtag_area">
+					<div class="title_1">
+						Event Filters
+					</div>
+					<hr class="simple_margin"/>
+					<input id="tag_add" class="text_input" type="text" placeholder="Add Tags" onkeypress="add_tag(event)"/>
+				</div>
+				<ul id="tag_list" class="tag_list">
+				</ul>
+			</div>
+			<div class="calendar_styles simple_margin">
+				<hr class="simple_margin"/>
+				<button class="left_button"> 
+					Weekly
+				</button>
+				<button class="right_button">
+					Monthly
+				</button>
+			</div>
+		</div>
+		<div class="calendar_section">
+			<table cellspacing=0>
+				<tr class="weekday_list">
+					<td class="weekday_cell timezone">
+						GMT - 05
+					</td>
+					<td class="weekday_cell">
+						Sun 10/19
+					</td>
+					<td class="weekday_cell">
+						Mon 10/20
+					</td>
+					<td class="weekday_cell">
+						Sun 10/21
+					</td>
+					<td class="weekday_cell">
+						Wed 10/22
+					</td>
+					<td class="weekday_cell">
+						Thu 10/23
+					</td>
+					<td class="weekday_cell">
+						Fri 10/24
+					</td>
+					<td class="weekday_cell">
+						Sat 10/25
+					</td>
+				</tr>
+			</table>
+			<div class="calendar">
+				<table cellspacing=0>
+					<tr class="days">
+						<td>
+							<div class="weekday_cell timeslot">
+								12am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								1am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								2am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								3am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								4am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								5am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								6am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								7am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								8am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								9am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								10am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								11am&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								12pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								1pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								2pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								3pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								4pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								5pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								6pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								7pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								8pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								9pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								10pm&nbsp
+							</div>
+							<div class="weekday_cell timeslot">
+								11pm&nbsp
+							</div>
+						</td>
+						<td class="weekday_cell">
+							<div/>
+						</td>
+						<td class="weekday_cell">
+							<div/>
+						</td>
+						<td class="weekday_cell">
+							<div/>
+						</td>
+						<td class="weekday_cell">
+							<div/>
+						</td>
+						<td class="weekday_cell">
+							<div/>
+						</td>
+						<td class="weekday_cell">
+							<div/>
+						</td>
+						<td class="weekday_cell">
+							<div/>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
