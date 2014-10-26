@@ -2,6 +2,8 @@ package edu.rpi.csci.sdd.epic.cli;
 
 import java.util.TreeMap;
 
+import edu.rpi.csci.sdd.epic.db.AccountModel;
+
 abstract class SubCommand
 {
     public abstract String usage();
@@ -20,12 +22,16 @@ public class AccountTool
     static
     {
         commands.put("create", new SubCommand() {
-            public String usage() { return "Usage: create username password"; }
-            public boolean checkArgs(String[] args) { return args.length == 3; }
+            public String usage() { return "Usage: create id event_provider email username password"; }
+            public boolean checkArgs(String[] args) { return args.length == 6; }
             public void action(String[] args) {
-                String username = args[1];
-                String password = args[2];
-                System.out.printf("Creating account with username %s and password %s\n", username, password);
+                String id = args[1];
+                boolean event_provider = Boolean.valueOf(args[2]);
+                String email_address = args[3];
+                String username = args[4];
+                String password = args[5];
+                try { AccountModel.createAccount(id, event_provider, email_address, username, password); }
+                catch(Exception e) { e.printStackTrace(); }
             }
         });
     }
