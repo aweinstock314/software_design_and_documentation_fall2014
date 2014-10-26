@@ -29,16 +29,16 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: event_tags; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+-- Name: event_tags; Type: TABLE; Schema: public; Owner: mcguik2; Tablespace: 
 --
 
 CREATE TABLE event_tags (
-    eventid character varying(80),
+    id integer,
     tag character varying(80)
 );
 
 
-ALTER TABLE public.event_tags OWNER TO postgres;
+ALTER TABLE public.event_tags OWNER TO mcguik2;
 
 --
 -- Name: events; Type: TABLE; Schema: public; Owner: mcguik2; Tablespace: 
@@ -128,10 +128,10 @@ ALTER TABLE ONLY events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::reg
 
 
 --
--- Data for Name: event_tags; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: event_tags; Type: TABLE DATA; Schema: public; Owner: mcguik2
 --
 
-COPY event_tags (eventid, tag) FROM stdin;
+COPY event_tags (id, tag) FROM stdin;
 \.
 
 
