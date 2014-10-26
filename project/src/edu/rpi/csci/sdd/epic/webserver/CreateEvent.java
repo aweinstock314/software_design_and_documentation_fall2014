@@ -15,8 +15,9 @@ public class CreateEvent extends PostRequestProcessor
         boolean recurring = parseCheckbox(postPairs.get("recurring"));
         long starttime = Long.valueOf(postPairs.get("starttime"));
         long endtime = Long.valueOf(postPairs.get("endtime"));
+        String location = postPairs.get("location");
         boolean oncampus = parseCheckbox(postPairs.get("oncampus"));
-        EventModel.createEvent(id, host, source, creator, recurring, starttime, endtime, oncampus);
+        EventModel.createEvent(id, host, source, creator, recurring, starttime, endtime, location, oncampus);
         return "<html><head><title>Event created</title></head><body>Event created successfully.</body></html>";
     }
 }
