@@ -29,19 +29,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: campus_locations; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE campus_locations (
-    id integer,
-    room_number integer,
-    building character varying(80)
-);
-
-
-ALTER TABLE public.campus_locations OWNER TO postgres;
-
---
 -- Name: event_tags; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -65,7 +52,7 @@ CREATE TABLE events (
     recurring boolean,
     starttime timestamp without time zone,
     endtime timestamp without time zone,
-    locationid integer,
+    location character varying(255),
     on_campus boolean
 );
 
@@ -111,14 +98,6 @@ CREATE TABLE users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
--- Data for Name: campus_locations; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY campus_locations (id, room_number, building) FROM stdin;
-\.
-
-
---
 -- Data for Name: event_tags; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -130,7 +109,7 @@ COPY event_tags (eventid, tag) FROM stdin;
 -- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: mcguik2
 --
 
-COPY events (id, host, source, creator, recurring, starttime, endtime, locationid, on_campus) FROM stdin;
+COPY events (id, host, source, creator, recurring, starttime, endtime, location, on_campus) FROM stdin;
 \.
 
 
