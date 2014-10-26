@@ -66,6 +66,7 @@ public class Util
     }
     public static ArrayList<String> getUsersTable() throws SQLException
     {
+        // TODO: move to AccountModel
         ArrayList<String> results = new ArrayList();
         Connection db = getCredentialedDataSource().getConnection();
         ResultSet rs = db.createStatement().executeQuery("SELECT * FROM USERS");

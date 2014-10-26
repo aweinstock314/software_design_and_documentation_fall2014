@@ -2,6 +2,7 @@ package edu.rpi.csci.sdd.epic.webserver;
 
 
 import com.sun.net.httpserver.HttpExchange;
+import edu.rpi.csci.sdd.epic.db.EventModel;
 import edu.rpi.csci.sdd.epic.webserver.UserSessions;
 import edu.rpi.csci.sdd.epic.util.Util;
 
@@ -29,6 +30,11 @@ public class SimpleTemplater
             if(page.contains("<!--HANDLE-LOGIN-->"))
             {
                 //us.doLogin(e);
+            }
+            if(page.contains("<!--INSERT-EVENTS-DB-AS-JS-ARRAY-->"))
+            {
+                //[{id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 100, endtime: 1000, location: "The Union's McNeil room", on_campus: true, tags: ["tag1"]}]
+                page = page.replace("<!--INSERT-EVENTS-DB-AS-JS-ARRAY-->", EventModel.getEventsAsJSArray());
             }
         }
         catch(Exception ex) { ex.printStackTrace(); }
