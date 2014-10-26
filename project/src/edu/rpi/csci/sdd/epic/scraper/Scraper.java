@@ -5,6 +5,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.sql.Timestamp;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -12,7 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
+import edu.rpi.csci.sdd.epic.db.EventModel;
 
 public class Scraper {
 	
@@ -90,7 +91,7 @@ public class Scraper {
 	}
 
 	//connects to the website, gets the html, and parses out the events.
-	public Scraper() throws IOException, ParseException{
+	public Scraper() throws IOException, ParseException, SQLException{
 		Document doc = Jsoup.connect("http://events.rpi.edu/union/main/showMain.rdo").timeout(0).get();
 		String  htmltext = doc.html();
 		System.out.println(htmltext);
@@ -117,9 +118,14 @@ public class Scraper {
 			}
 			//System.out.println(event.select("span.eventTip").html());
 		}
+
+
+		for(Event e : events){
+			EventModel.createEvent(e.getName(), "Union", "http://events.rpi.edu/union/main/showMainEnd.rdo", "UnionScraper", false, e.getStart().getTime(), e.getEnd().getTime(), e.getLocation(), true);
+		}
 	}
 	
-	public static void main(String[] args) throws IOException, ParseException{
+	public static void main(String[] args) throws IOException, ParseException, SQLException{
 		Scraper scraper = new Scraper();
 	}
 }

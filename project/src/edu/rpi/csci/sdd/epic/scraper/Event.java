@@ -26,7 +26,17 @@ public class Event {
 		this.location = location;
 	}
 	
-	
+	public Timestamp getStart(){
+		return start;
+	}
+
+	public Timestamp getEnd(){
+		return end;
+	}
+
+	public String getName(){
+		return name;
+	}
 	
 }
 
