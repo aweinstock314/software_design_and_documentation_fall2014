@@ -57,12 +57,17 @@ public class Util
     }
     public static DataSource getCredentialedDataSource()
     {
-        return getJDBCDataSource("avi", "password");
+        String[] lines;
+        try { lines = slurpFile(new File("epic_database_creds.txt")).split("\n"); }
+        catch(IOException e) { throw new RuntimeException(e); }
+        String username = lines[0].trim();
+        String password = lines[1].trim();
+        return getJDBCDataSource(username, password);
     }
     public static ArrayList<String> getUsersTable() throws SQLException
     {
         ArrayList<String> results = new ArrayList();
-        Connection db = getCredentialedDataSource().getConnection(); //TODO: find some solution for the password when NOT running locally
+        Connection db = getCredentialedDataSource().getConnection();
         ResultSet rs = db.createStatement().executeQuery("SELECT * FROM USERS");
         while(rs.next())
         {
