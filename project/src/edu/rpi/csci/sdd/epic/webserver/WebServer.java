@@ -39,13 +39,13 @@ public class WebServer implements HttpHandler
         catch(IOException ex) { ex.printStackTrace(); throw ex; }
         finally { e.close(); }
     }
-    protected void serveString(HttpExchange e, int code, String s) throws IOException
+    public static void serveString(HttpExchange e, int code, String s) throws IOException
     {
         e.sendResponseHeaders(code, s.length());
         PrintStream ps = new PrintStream(e.getResponseBody());
         ps.print(s);
     }
-    protected void serveInternalError(HttpExchange exchange, Exception exception) throws IOException
+    public static void serveInternalError(HttpExchange exchange, Exception exception) throws IOException
     {
         StringBuilder sb = new StringBuilder();
         sb.append("<html><head><title>Error 500 - Internal Error</title></head><body>");
@@ -87,6 +87,7 @@ public class WebServer implements HttpHandler
                 serv.createContext("/", outerThis);
                 serv.createContext("/needsauth/", outerThis).setAuthenticator(new UserSessions("epic_app"));
                 serv.createContext("/clearcreds", outerThis).setAuthenticator(new ClearAuthenticator("epic_app"));
+                serv.createContext("/createaccount", new CreateAccount());
                 System.out.printf("Bound to port %s\n", port);
             }
             catch(Exception e) {e.printStackTrace();}
