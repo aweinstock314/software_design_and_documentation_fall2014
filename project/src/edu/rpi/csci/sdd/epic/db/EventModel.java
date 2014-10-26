@@ -40,8 +40,20 @@ public class EventModel
             long endtime = rs.getDate(8).getTime();
             String location = rs.getString(9);
             boolean on_campus = rs.getBoolean(10);
-            String tagsJSArray = "[]"; // TODO: get tags from database
+            String tagsJSArray = getTagsArray(id);
             results.add(String.format("{name: \"%s\", id: %d, host: \"%s\", source: \"%s\", creator: \"%s\", recurring: %b, starttime: %d, endtime: %d, location: \"%s\", on_campus: %b, tags: %s}", name, id, host, source, creator, recurring, starttime, endtime, location, on_campus, tagsJSArray));
+        }
+        return "[" + Util.joinList(results, ", ") + "]";
+    }
+    public static String getTagsArray(int eventId) throws SQLException
+    {
+        ArrayList<String> results = new ArrayList();
+        Connection db = Util.getCredentialedDataSource().getConnection();
+        ResultSet rs = db.createStatement().executeQuery(String.format("SELECT tag FROM event_tags WHERE id='%d'", eventId));
+        while(rs.next())
+        {
+            String tag = rs.getString(1);
+            results.add(tag);
         }
         return "[" + Util.joinList(results, ", ") + "]";
     }
