@@ -44,10 +44,14 @@ public class Util
         ds.setPassword(password);
         return ds;
     }
+    public static DataSource getCredentialedDataSource()
+    {
+        return getJDBCDataSource("avi", "password");
+    }
     public static ArrayList<String> getUsersTable() throws SQLException
     {
         ArrayList<String> results = new ArrayList();
-        Connection db = getJDBCDataSource().getConnection("avi", "password"); //TODO: find some solution for the password when NOT running locally
+        Connection db = getCredentialedDataSource().getConnection(); //TODO: find some solution for the password when NOT running locally
         ResultSet rs = db.createStatement().executeQuery("SELECT * FROM USERS");
         while(rs.next())
         {

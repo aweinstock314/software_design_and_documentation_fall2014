@@ -33,7 +33,7 @@ public class UserSessions extends BasicAuthenticator
         Factory<SecurityManager> factory = new IniSecurityManagerFactory("sample_accounts.ini");
         SecurityManager securityManager = factory.getInstance();
         JdbcRealm databaseRealm = new JdbcRealm();
-        databaseRealm.setDataSource(Util.getJDBCDataSource("avi", "password"));
+        databaseRealm.setDataSource(Util.getCredentialedDataSource());
         ((RealmSecurityManager)securityManager).setRealm(databaseRealm);
         SecurityUtils.setSecurityManager(securityManager);
     }
