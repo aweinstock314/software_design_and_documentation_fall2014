@@ -41,7 +41,7 @@ CREATE TABLE event_tags (
 ALTER TABLE public.event_tags OWNER TO postgres;
 
 --
--- Name: events; Type: TABLE; Schema: public; Owner: mcguik2; Tablespace: 
+-- Name: events; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE events (
@@ -57,7 +57,7 @@ CREATE TABLE events (
 );
 
 
-ALTER TABLE public.events OWNER TO mcguik2;
+ALTER TABLE public.events OWNER TO postgres;
 
 --
 -- Name: preference_sets; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -91,7 +91,9 @@ ALTER TABLE public.user_tags OWNER TO postgres;
 CREATE TABLE users (
     id character varying(80),
     event_provider boolean,
-    email_address character varying(160)
+    email_address character varying(160),
+    username character varying(80),
+    password character varying(80)
 );
 
 
@@ -106,7 +108,7 @@ COPY event_tags (eventid, tag) FROM stdin;
 
 
 --
--- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: mcguik2
+-- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY events (id, host, source, creator, recurring, starttime, endtime, location, on_campus) FROM stdin;
