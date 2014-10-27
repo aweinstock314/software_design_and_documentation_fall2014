@@ -61,6 +61,7 @@ public class WebServer implements HttpHandler
         {
             String requestPath = e.getRequestURI().getPath();
             File fileToServe = new File(directoryToServe, requestPath);
+            if(fileToServe.isDirectory()) { fileToServe = new File(fileToServe, "index.html"); }
             outContent[0] = Util.slurpFile(fileToServe);
             outCode[0] = 200;
             if(outContent[0] == null)
