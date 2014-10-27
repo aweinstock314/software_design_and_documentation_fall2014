@@ -62,7 +62,7 @@ public class EventModel
             ResultSet rs = db.createStatement().executeQuery(String.format("SELECT tag FROM event_tags WHERE id='%d'", eventId));
             while(rs.next())
             {
-                String tag = rs.getString(1);
+                String tag = "\"" + rs.getString(1) + "\"";
                 results.add(tag);
             }
         }
