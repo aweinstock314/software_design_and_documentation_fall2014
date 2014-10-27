@@ -90,21 +90,20 @@ function calendar_update() {
 					if (events[i].tags[k] == filters[j]) {
 						valid_event = true;
 					}
-					else if (events[i].name == filters[j]) {
-						valid_event = true;
-					}
-					else if (events[i].host == filters[j]) {
-						valid_event = true;
-					}
-					else if (events[i].location == filters[j]) {
-						valid_event = true;
-					}
-					else if (events[i].creator == filters[j]) {
-						valid_event = true;
-					}
+				}
+				if (events[i].name == filters[j]) {
+					valid_event = true;
+				}
+				if (events[i].host == filters[j]) {
+					valid_event = true;
+				}
+				if (events[i].location == filters[j]) {
+					valid_event = true;
+				}
+				if (events[i].creator == filters[j]) {
+					valid_event = true;
 				}
 			}
-
 			// If event has been validated, add to calendar list.
 			if (valid_event == true) {
 				events_to_display.push(events[i]);
