@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathdots}
+\usepackage{color}
+\usepackage{textcomp}
+\usepackage[pdftex]{graphicx}
+\usepackage{tikz}
+\usepackage{enumerate}
+\usepackage[margin=1in,footskip=0.25in]{geometry}
+\newcommand{\mtrx}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\angles}[1]{\langle#1\rangle}
+\newcommand{\floor}[1]{{\left\lfloor#1\right\rfloor}}
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+\let\union\cup
+\let\intersect\cap
+%\usepgfplotslibrary{external} 
+%\tikzexternalize
+\begin{document}
+\tikzset{every picture/.append style={scale=.75,every node/.style={scale=.75}}}
+CRC cards:\\\\
+%\begin{tabular}{|c|c|}
+%\hline
+%Class name & Collaborators\\\hline
+%Responsibility1 & Collaborator1\\
+%Responsibility2 & Collaborator2\\
+%\hline
+%\end{tabular}\\
+\newcommand{\crccard}[2]{\begin{tabular}{|p{7cm}|p{5cm}|}\hline Class: #1 & Collaborators:\\\hline#2\hline\end{tabular}\\\\\\}
+%\crccard{ClassName}{
+%Responsibility1 & Collaborator1\\
+%Responsibility2 & Collaborator2\\
+%}\\
+\crccard{WebServer}{
+Serves pages to clients & HttpExchange\\
+Gets content from filesystem, modifies with SimpleTemplater & SimpleTemplater\\
+Delegates POST requests to handler classes & CreateAccount, CreateEvent\\
+}
+\crccard{SimpleTemplator}{
+Processes pages passed to it, injects dynamic content based on the database & AccountModel, EventModel\\
+}
+\crccard{AccountModel}{
+Stores/retrieves account data from the database & java.sql.Connection\\
+}
+\crccard{EventModel}{
+Stores/retrieves events data from the database & java.sql.Connection\\
+}
+\crccard{PostRequestProcessor}{
+Parses HTTP POST headers into a Map, and calls an abstract method on that Map (Template Method Design Pattern) & CreateAccount, CreateEvent\\
+}
+\crccard{CreateAccount}{
+Responds to HTTP POST requests to create accounts & AccountModel\\
+}
+\crccard{CreateEvent}{
+Responds to HTTP POST requests to enter events into the database & EventModel\\
+}
+\crccard{Scraper}{
+Crawls websites for events, puts them into database & EventModel\\
+}
+
+\end{document}
