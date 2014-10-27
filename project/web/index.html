@@ -1,10 +1,10 @@
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="jquery-latest.min.js"></script>
 <script language="javascript">
 
 // Initialize global variables (filter and event arrays, array of events to display)
 var filters = [];
-//var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;
-var events = [{name: "Partytime", id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414404415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}];
+var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;
+//var events = [{name: "Partytime", id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414404415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}];
 var events_to_display = [];
 
 // convert unix timestamp into modern date - rather than milliseconds since 1970!
@@ -168,13 +168,15 @@ function calendar_display() {
 
 		// Append appropriate date container and all sub-objects to create event.
 		var day_container = document.getElementById(id_to_match);
-		day_container.appendChild(new_event);
-		new_event.appendChild(event_title);
-		event_title.appendChild(title_text);
-		new_event.appendChild(event_times);
-		event_times.appendChild(times_text);
-		new_event.appendChild(event_location);
-		event_location.appendChild(location_text);
+		if(day_container) {
+			day_container.appendChild(new_event);
+			new_event.appendChild(event_title);
+			event_title.appendChild(title_text);
+			new_event.appendChild(event_times);
+			event_times.appendChild(times_text);
+			new_event.appendChild(event_location);
+			event_location.appendChild(location_text);
+		}
 	}
 }
 
