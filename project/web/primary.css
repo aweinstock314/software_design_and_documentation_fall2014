@@ -1,3 +1,9 @@
+body {
+	margin: 5px;
+	padding: 0;
+	background-color: #EEEEEE;
+}
+
 .head_title {
 	font-size: 28pt;
 	font-family: Arial;
@@ -115,6 +121,10 @@
 .weekday_cell {
 	border: 1px black solid;
 	width: 158px;
+	vertical-align: top;
+}
+
+.weekday_cell.event_list {
 }
 
 .weekday_cell.timezone {
@@ -159,4 +169,26 @@
 	font-size: 16px;
 	padding-right: 3px;
 	padding-left: 3px;
+}
+
+.calendar_event {
+	border: 1px black solid;
+	width: 158px;
+	background-color: lime;
+
+	max-height: 100px;
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 2px;
+}
+
+.event_text {
+	font-family: Arial;
+	font-size: 12px;
+	text-align: left;
+	padding: 1px;
+}
+
+.event_text.event_title {
+	font-weight: bold;
 }

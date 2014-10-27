@@ -1,7 +1,25 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script language="javascript">
 
+// Initialize global variables (filter and event arrays, array of events to display)
 var filters = [];
+//var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;
+var events = [{name: "Partytime", id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414404415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}];
+var events_to_display = [];
+
+// convert unix timestamp into modern date - rather than milliseconds since 1970!
+function timeConverter(UNIX_timestamp){
+  var stamp = new Date(UNIX_timestamp);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = stamp.getFullYear();
+  var month = months[stamp.getMonth()];
+  var date = stamp.getDate();
+  var hour = stamp.getHours();
+  var min = stamp.getMinutes();
+  var sec = stamp.getSeconds();
+  var time = [date , month , year , hour , min , sec];
+  return time;
+}
 
 function add_tag(press) {
 	// Check to see which key has been pressed.
@@ -31,8 +49,9 @@ function add_tag(press) {
 			       filters.splice(i, 1);
 			    }
 			}
-
+			// destroy tag object and update calendar.
 			this.parentNode.removeChild(this);
+			calendar_update();
 		};
 
 		// Append to create html structure and add to document.
@@ -47,6 +66,7 @@ function add_tag(press) {
 
 		// Add to list of tags for further manipulation.
 		filters.push(tag_id);
+		calendar_update();
 	}
 }
 
@@ -56,12 +76,106 @@ function swap_box() {
 	$("#account_create_box").toggle();
 }
 
-function remove_tag(tag_id) {
+function calendar_update() {
+	// clear calendar to prepare for update.
+	calendar_clear();
+	// if filters are enabled, for each event, check to see if it has a valid tag. 
+	// Also check to see if a tag matches the event's host, location, or creator.
+	// If it does not, do not display on calendar.  If it does, call calendar_add to add to list of displayed events.
+	if (filters.length > 0) {
+		for (var i = 0; i < events.length; i++) {
+			var valid_event = false;
+			for (var j = 0; j < filters.length; j++) {
+				for (var k = 0; k < events[i].tags.length; k++) {
+					if (events[i].tags[k] == filters[j]) {
+						valid_event = true;
+					}
+					else if (events[i].name == filters[j]) {
+						valid_event = true;
+					}
+					else if (events[i].host == filters[j]) {
+						valid_event = true;
+					}
+					else if (events[i].location == filters[j]) {
+						valid_event = true;
+					}
+					else if (events[i].creator == filters[j]) {
+						valid_event = true;
+					}
+				}
+			}
 
-	// remove tag from document.
-	tag_list = document.getElementById(tag_list);
-	tag_to_remove = document.getElementById(tag_id);
-	tag_list.removeChild(tag_to_remove);
+			// If event has been validated, add to calendar list.
+			if (valid_event == true) {
+				events_to_display.push(events[i]);
+			}
+		}
+	}
+
+	// if no filters are enabled, add all events to calendar.
+	else {
+		for (var i=0; i < events.length; i++) {
+			events_to_display.push(events[i]);
+		}
+	}
+
+	// display updated calendar.
+	calendar_display();
+}
+
+// clears calendar.  Removes all displayed events, and resets 
+// events_to_display global array.
+
+function calendar_clear() {
+	$(".calendar_event").remove();
+	events_to_display = [];
+}
+
+// display calendar based on events_to_display.
+
+function calendar_display() {
+
+	// For each event in array...
+	for (i = 0; i < events_to_display.length; i++) {
+
+		// Calculate dates and times for the event.
+		var start_time = timeConverter(events_to_display[i].starttime);
+		var end_time = timeConverter(events_to_display[i].endtime);
+		var start_date = start_time[0];
+		var start_month = start_time[1];
+		var start_clock = start_time[4] + ":" + start_time[5];
+		var end_clock = end_time[4] + ":" + end_time[5];
+		var id_to_match = start_month + " " + start_date;
+		var start_to_end = start_clock + " - " + end_clock;
+
+		// Create containers for all text, populate.
+		var new_event = document.createElement("div");
+		var event_title = document.createElement("div");
+		var event_times = document.createElement("div");
+		var event_location = document.createElement("div");
+		var title_text = document.createTextNode(events_to_display[i].name);
+		var times_text = document.createTextNode(start_to_end);
+		var location_text = document.createTextNode(events_to_display[i].location);
+
+		// Set event id for further manipulation.
+		new_event.id = events_to_display[i].name;
+
+		// Set proper styling for all divs.
+		new_event.className = "calendar_event";
+		event_title.className = "event_text event_title";
+		event_times.className = "event_text";
+		event_location.className = "event_text";
+
+		// Append appropriate date container and all sub-objects to create event.
+		var day_container = document.getElementById(id_to_match);
+		day_container.appendChild(new_event);
+		new_event.appendChild(event_title);
+		event_title.appendChild(title_text);
+		new_event.appendChild(event_times);
+		event_times.appendChild(times_text);
+		new_event.appendChild(event_location);
+		event_location.appendChild(location_text);
+	}
 }
 
 </script>
@@ -75,7 +189,7 @@ function remove_tag(tag_id) {
 	</div>
 </head>
 
-<body style="background-color: #EEEEEE">
+<body onload="calendar_update()">
 	<div style="margin-top: 10px;">
 		<div class="left_bar">
 			<div id="signin_box" class="signin_box">
@@ -137,25 +251,25 @@ function remove_tag(tag_id) {
 						GMT - 05
 					</td>
 					<td class="weekday_cell">
-						Sun 10/19
+						Sun 10/26
 					</td>
 					<td class="weekday_cell">
-						Mon 10/20
+						Mon 10/27
 					</td>
 					<td class="weekday_cell">
-						Sun 10/21
+						Sun 10/28
 					</td>
 					<td class="weekday_cell">
-						Wed 10/22
+						Wed 10/29
 					</td>
 					<td class="weekday_cell">
-						Thu 10/23
+						Thu 10/30
 					</td>
 					<td class="weekday_cell">
-						Fri 10/24
+						Fri 10/31
 					</td>
 					<td class="weekday_cell">
-						Sat 10/25
+						Sat 11/1
 					</td>
 				</tr>
 			</table>
@@ -236,25 +350,25 @@ function remove_tag(tag_id) {
 								11pm&nbsp
 							</div>
 						</td>
-						<td class="weekday_cell">
+						<td class="weekday_cell" id="Oct 26">
 							<div/>
 						</td>
-						<td class="weekday_cell">
+						<td class="weekday_cell" id="Oct 27">
 							<div/>
 						</td>
-						<td class="weekday_cell">
+						<td class="weekday_cell" id="Oct 28">
 							<div/>
 						</td>
-						<td class="weekday_cell">
+						<td class="weekday_cell" id="Oct 29">
 							<div/>
 						</td>
-						<td class="weekday_cell">
+						<td class="weekday_cell" id="Oct 30">
 							<div/>
 						</td>
-						<td class="weekday_cell">
+						<td class="weekday_cell" id="Oct 31">
 							<div/>
 						</td>
-						<td class="weekday_cell">
+						<td class="weekday_cell" id="Nov 1">
 							<div/>
 						</td>
 					</tr>
