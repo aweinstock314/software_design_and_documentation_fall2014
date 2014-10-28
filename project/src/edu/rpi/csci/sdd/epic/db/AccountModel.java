@@ -12,8 +12,13 @@ public class AccountModel
         Connection db = Util.getCredentialedDataSource().getConnection();
         try
         {
-            Statement stmt = db.createStatement();
-            stmt.execute(String.format("INSERT INTO users (id, event_provider, email_address, username, password) VALUES ( '%s', '%b', '%s', '%s', '%s' )", id, event_provider, email, username, password));
+            PreparedStatement stmt = db.prepareStatement("INSERT INTO users (id, event_provider, email_address, username, password) VALUES ( ?, ?, ?, ?, ? )");
+            stmt.setString(1, id);
+            stmt.setBoolean(2, event_provider);
+            stmt.setString(3, email);
+            stmt.setString(4, username);
+            stmt.setString(5, password);
+            stmt.execute();
         }
         finally { db.close(); }
     }
