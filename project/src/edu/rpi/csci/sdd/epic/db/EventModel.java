@@ -1,5 +1,8 @@
 package edu.rpi.csci.sdd.epic.db;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import java.sql.*;
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -8,29 +11,19 @@ import edu.rpi.csci.sdd.epic.util.Util;
 
 public class EventModel
 {
-    public static String unixTimestamp(long t)
-    {
-        //http://stackoverflow.com/questions/16609722/postgres-how-to-convert-from-unix-epoch-to-date
-        return String.format("(to_timestamp( cast(%d AS bigint) / 1000))", t);
-    }
     public static void createEvent(String name, String host, String source, String creator, boolean recurring, long starttime, long endtime, String location, boolean on_campus) throws SQLException
     {
-        Connection db = DBUtil.getCredentialedDataSource().getConnection();
-        try
-        {
-            PreparedStatement stmt = db.prepareStatement("INSERT INTO events (name, host, source, creator, recurring, starttime, endtime, location, on_campus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            stmt.setObject(1, name);
-            stmt.setObject(2, host);
-            stmt.setObject(3, source);
-            stmt.setObject(4, creator);
-            stmt.setObject(5, recurring);
-            stmt.setObject(6, new Date(starttime));
-            stmt.setObject(7, new Date(endtime));
-            stmt.setObject(8, location);
-            stmt.setObject(9, on_campus);
-            stmt.execute();
-        }
-        finally { db.close(); }
+        Map<String, Object> vals = new LinkedHashMap<String, Object>();
+        vals.put("name", name);
+        vals.put("host", host);
+        vals.put("source", source);
+        vals.put("creator", creator);
+        vals.put("recurring", recurring);
+        vals.put("starttime", new Date(starttime));
+        vals.put("endtime", new Date(endtime));
+        vals.put("location", location);
+        vals.put("on_campus", on_campus);
+        GenericModel.insert(DBUtil.getCredentialedDataSource(), "events", vals);
     }
     public static String getEventsAsJSArray() throws SQLException
     {

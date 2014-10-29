@@ -1,6 +1,8 @@
 package edu.rpi.csci.sdd.epic.db;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import java.sql.*;
 import javax.sql.DataSource;
@@ -11,18 +13,13 @@ public class AccountModel
 {
     public static void createAccount(String id, boolean event_provider, String email, String username, String password) throws SQLException
     {
-        Connection db = DBUtil.getCredentialedDataSource().getConnection();
-        try
-        {
-            PreparedStatement stmt = db.prepareStatement("INSERT INTO users (id, event_provider, email_address, username, password) VALUES ( ?, ?, ?, ?, ? )");
-            stmt.setString(1, id);
-            stmt.setBoolean(2, event_provider);
-            stmt.setString(3, email);
-            stmt.setString(4, username);
-            stmt.setString(5, password);
-            stmt.execute();
-        }
-        finally { db.close(); }
+        Map<String, Object> vals = new LinkedHashMap<String, Object>();
+        vals.put("id", id);
+        vals.put("event_provider", event_provider);
+        vals.put("email_address", email);
+        vals.put("username", username);
+        vals.put("password", password);
+        GenericModel.insert(DBUtil.getCredentialedDataSource(), "users", vals);
     }
     public static ArrayList<String> getUsersTable() throws SQLException
     {
