@@ -29,12 +29,12 @@ public abstract class PostRequestProcessor implements HttpHandler
         }
         try
         {
-            WebServer.serveString(e, 200, processPostRequest(postPairs));
+            WSUtil.serveString(e, 200, processPostRequest(postPairs));
         }
         catch(Exception ex)
         {
             ex.printStackTrace();
-            WebServer.serveInternalError(e, ex);
+            WSUtil.serveInternalError(e, ex);
         }
     }
 }
