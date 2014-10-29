@@ -1,7 +1,10 @@
 package edu.rpi.csci.sdd.epic.db;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.sql.*;
 import javax.sql.DataSource;
 
@@ -36,5 +39,25 @@ public class GenericModel
             stmt.execute();
         }
         finally { db.close(); }
+    }
+    public static Map<String, List<Object>> select(DataSource ds, String tablename, String... columns) throws SQLException
+    {
+        Map<String, List<Object>> ret = new LinkedHashMap<String, List<Object>>();
+        for(String col : columns) { ret.put(col, new ArrayList<Object>()); }
+        Connection db = ds.getConnection();
+        try
+        {
+            String colnames = Util.joinIterable(Arrays.asList(columns), ", ");
+            ResultSet rs = db.createStatement().executeQuery(String.format("SELECT %s FROM %s", colnames, tablename));
+            while(rs.next())
+            {
+                for(int i=0; i<columns.length; i++)
+                {
+                    ret.get(columns[i]).add(rs.getObject(i+1));
+                }
+            }
+        }
+        finally { db.close(); }
+        return ret;
     }
 }
