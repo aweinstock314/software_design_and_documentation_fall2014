@@ -20,7 +20,7 @@ public class SimpleTemplater
         {
             if(page.contains("<!--USERS-TABLE-->"))
             {
-                page = page.replace("<!--USERS-TABLE-->", Util.joinList(AccountModel.getUsersTable(), "<br />\n"));
+                page = page.replace("<!--USERS-TABLE-->", Util.joinIterable(AccountModel.getUsersTable(), "<br />\n"));
             }
             if(page.contains("<!--REQUESTED-PAGE-->"))
             {

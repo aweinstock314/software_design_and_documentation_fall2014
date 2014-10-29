@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.lang.Iterable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Util
@@ -38,16 +40,21 @@ public class Util
     {
         return slurpReader(new InputStreamReader(s));
     }
-    public static String joinList(List<String> lst, String with)
+    public static String joinIterable(Iterable<String> iterable, String infix)
+    {
+        return joinIterable(iterable, infix, "", "");
+    }
+    public static String joinIterable(Iterable<String> iterable, String infix, String prefix, String suffix)
     {
         StringBuilder sb = new StringBuilder();
-        final int size = lst.size();
-        int idx = 0;
-        for(String s : lst)
+        sb.append(prefix);
+        Iterator<String> iter = iterable.iterator();
+        while(iter.hasNext())
         {
-            sb.append(s);
-            if(++idx != size) { sb.append(with); }
+            sb.append(iter.next());
+            if(iter.hasNext()) { sb.append(infix); }
         }
+        sb.append(suffix);
         return sb.toString();
     }
 }

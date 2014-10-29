@@ -56,7 +56,7 @@ public class EventModel
             }
         }
         finally { db.close(); }
-        return "[" + Util.joinList(results, ", ") + "]";
+        return Util.joinIterable(results, ", ", "[", "]");
     }
     public static String getTagsArray(int eventId) throws SQLException
     {
@@ -72,6 +72,6 @@ public class EventModel
             }
         }
         finally { db.close(); }
-        return "[" + Util.joinList(results, ", ") + "]";
+        return Util.joinIterable(results, ", ", "[", "]");
     }
 }
