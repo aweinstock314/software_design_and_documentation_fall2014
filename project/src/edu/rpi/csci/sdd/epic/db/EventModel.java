@@ -15,7 +15,7 @@ public class EventModel
     }
     public static void createEvent(String name, String host, String source, String creator, boolean recurring, long starttime, long endtime, String location, boolean on_campus) throws SQLException
     {
-        Connection db = Util.getCredentialedDataSource().getConnection();
+        Connection db = DBUtil.getCredentialedDataSource().getConnection();
         try
         {
             PreparedStatement stmt = db.prepareStatement("INSERT INTO events (name, host, source, creator, recurring, starttime, endtime, location, on_campus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -35,7 +35,7 @@ public class EventModel
     public static String getEventsAsJSArray() throws SQLException
     {
         ArrayList<String> results = new ArrayList();
-        Connection db = Util.getCredentialedDataSource().getConnection();
+        Connection db = DBUtil.getCredentialedDataSource().getConnection();
         try
         {
             ResultSet rs = db.createStatement().executeQuery("SELECT name, id, host, source, creator, recurring, starttime, endtime, location, on_campus FROM events");
@@ -61,7 +61,7 @@ public class EventModel
     public static String getTagsArray(int eventId) throws SQLException
     {
         ArrayList<String> results = new ArrayList();
-        Connection db = Util.getCredentialedDataSource().getConnection();
+        Connection db = DBUtil.getCredentialedDataSource().getConnection();
         try
         {
             ResultSet rs = db.createStatement().executeQuery(String.format("SELECT tag FROM event_tags WHERE id='%d'", eventId));

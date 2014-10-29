@@ -1,5 +1,7 @@
 package edu.rpi.csci.sdd.epic.db;
 
+import java.util.ArrayList;
+
 import java.sql.*;
 import javax.sql.DataSource;
 
@@ -9,7 +11,7 @@ public class AccountModel
 {
     public static void createAccount(String id, boolean event_provider, String email, String username, String password) throws SQLException
     {
-        Connection db = Util.getCredentialedDataSource().getConnection();
+        Connection db = DBUtil.getCredentialedDataSource().getConnection();
         try
         {
             PreparedStatement stmt = db.prepareStatement("INSERT INTO users (id, event_provider, email_address, username, password) VALUES ( ?, ?, ?, ?, ? )");
@@ -21,5 +23,19 @@ public class AccountModel
             stmt.execute();
         }
         finally { db.close(); }
+    }
+    public static ArrayList<String> getUsersTable() throws SQLException
+    {
+        ArrayList<String> results = new ArrayList();
+        Connection db = DBUtil.getCredentialedDataSource().getConnection();
+        ResultSet rs = db.createStatement().executeQuery("SELECT * FROM USERS");
+        while(rs.next())
+        {
+            String username = rs.getString(1);
+            Boolean isEventProvider = rs.getBoolean(2);
+            String email = rs.getString(3);
+            results.add(String.format("(%s, %b, %s)", username, isEventProvider, email));
+        }
+        return results;
     }
 }

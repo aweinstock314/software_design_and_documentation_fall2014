@@ -17,6 +17,7 @@ import org.apache.shiro.util.Factory;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.BasicAuthenticator;
 
+import edu.rpi.csci.sdd.epic.db.DBUtil;
 import edu.rpi.csci.sdd.epic.util.Util;
 
 // possibly rename this class? try and find/write a 
@@ -33,7 +34,7 @@ public class UserSessions extends BasicAuthenticator
         Factory<SecurityManager> factory = new IniSecurityManagerFactory("sample_accounts.ini");
         SecurityManager securityManager = factory.getInstance();
         JdbcRealm databaseRealm = new JdbcRealm();
-        databaseRealm.setDataSource(Util.getCredentialedDataSource());
+        databaseRealm.setDataSource(DBUtil.getCredentialedDataSource());
         ((RealmSecurityManager)securityManager).setRealm(databaseRealm);
         SecurityUtils.setSecurityManager(securityManager);
     }

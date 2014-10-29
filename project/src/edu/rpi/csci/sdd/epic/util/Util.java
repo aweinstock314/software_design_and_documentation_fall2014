@@ -12,10 +12,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.sql.*;
-import javax.sql.DataSource;
-import org.postgresql.ds.PGSimpleDataSource;
-
 public class Util
 {
     public static String throwableToString(Throwable t)
@@ -41,43 +37,6 @@ public class Util
     public static String slurpStream(InputStream s) throws IOException
     {
         return slurpReader(new InputStreamReader(s));
-    }
-    public static DataSource getJDBCDataSource()
-    {
-        PGSimpleDataSource ds = new PGSimpleDataSource();
-        ds.setDatabaseName("epic_db");
-        return ds;
-    }
-    public static DataSource getJDBCDataSource(String username, String password)
-    {
-        PGSimpleDataSource ds = (PGSimpleDataSource)getJDBCDataSource();
-        ds.setUser(username);
-        ds.setPassword(password);
-        return ds;
-    }
-    public static DataSource getCredentialedDataSource()
-    {
-        String[] lines;
-        try { lines = slurpFile(new File("epic_database_creds.txt")).split("\n"); }
-        catch(IOException e) { throw new RuntimeException(e); }
-        String username = lines[0].trim();
-        String password = lines[1].trim();
-        return getJDBCDataSource(username, password);
-    }
-    public static ArrayList<String> getUsersTable() throws SQLException
-    {
-        // TODO: move to AccountModel
-        ArrayList<String> results = new ArrayList();
-        Connection db = getCredentialedDataSource().getConnection();
-        ResultSet rs = db.createStatement().executeQuery("SELECT * FROM USERS");
-        while(rs.next())
-        {
-            String username = rs.getString(1);
-            Boolean isEventProvider = rs.getBoolean(2);
-            String email = rs.getString(3);
-            results.add(String.format("(%s, %b, %s)", username, isEventProvider, email));
-        }
-        return results;
     }
     public static String joinList(List<String> lst, String with)
     {

@@ -1,7 +1,7 @@
 package edu.rpi.csci.sdd.epic.webserver;
 
-
 import com.sun.net.httpserver.HttpExchange;
+import edu.rpi.csci.sdd.epic.db.AccountModel;
 import edu.rpi.csci.sdd.epic.db.EventModel;
 import edu.rpi.csci.sdd.epic.webserver.UserSessions;
 import edu.rpi.csci.sdd.epic.util.Util;
@@ -20,7 +20,7 @@ public class SimpleTemplater
         {
             if(page.contains("<!--USERS-TABLE-->"))
             {
-                page = page.replace("<!--USERS-TABLE-->", Util.joinList(Util.getUsersTable(), "<br />\n"));
+                page = page.replace("<!--USERS-TABLE-->", Util.joinList(AccountModel.getUsersTable(), "<br />\n"));
             }
             if(page.contains("<!--REQUESTED-PAGE-->"))
             {
