@@ -3,6 +3,8 @@ package edu.rpi.csci.sdd.epic.util;
 import java.lang.Iterable;
 import java.util.Iterator;
 
+// Simulates array of element 'e' of specified size 's'
+// Currently used to generate query string for prepared statements
 public class FiniteCyclicIterable<T> implements Iterable<T>
 {
     final protected T elem;
