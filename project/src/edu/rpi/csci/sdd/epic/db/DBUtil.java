@@ -11,19 +11,26 @@ import edu.rpi.csci.sdd.epic.util.Util;
 
 public class DBUtil
 {
-    public static DataSource getJDBCDataSource()
+    // get a DataSource object that can connect to the DB, but still needs a username/password at the callsite
+    protected static DataSource getJDBCDataSource()
     {
         PGSimpleDataSource ds = new PGSimpleDataSource();
         ds.setDatabaseName("epic_db");
         return ds;
     }
-    public static DataSource getJDBCDataSource(String username, String password)
+    // get a DataSource object that can connect to the DB, and 
+    //  apply a username/password at creation time (so anything can 
+    //  use it directly).
+    protected static DataSource getJDBCDataSource(String username, String password)
     {
         PGSimpleDataSource ds = (PGSimpleDataSource)getJDBCDataSource();
         ds.setUser(username);
         ds.setPassword(password);
         return ds;
     }
+    // get a DataSource object using the credentials stored in 
+    //  a file. This is the only method here intended to be called 
+    //  externally.
     public static DataSource getCredentialedDataSource()
     {
         String[] lines;
