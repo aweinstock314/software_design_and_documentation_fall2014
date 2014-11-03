@@ -179,6 +179,26 @@ function calendar_display() {
 	}
 }
 
+function check_form(form) {
+	var success_check = new XMLHttpRequest();
+	success_check.onload = console.log;
+	success_check.open("post", "/signin", true);
+	success_check.send(form);
+	console.log(form);
+}
+
+/*	if ($('#signin_username').val() == '') {
+		$('#error_box').removeClass('hidden');
+		$('#error_box').val("Please enter your username");
+	}
+	if ($('#signin_password').val() == '') {
+		$('#error_box').removeClass('hidden');
+		$('#error_box').val("Please enter your password");
+	}
+	$('#error_box').addClass('hidden');
+	return true;
+*/
+
 </script>
 <head>
 	<title>RPIepic</title>
@@ -194,14 +214,19 @@ function calendar_display() {
 <body onload="calendar_update()">
 	<div style="margin-top: 10px;">
 		<div class="left_bar">
+			<div id="error_box" class="error_box hidden">
+			</div>
 			<div id="signin_box" class="signin_box">
 				<div class="title_1">
 					Sign In
 				</div>
 				<hr class="simple_margin"/>
-				<form class="form_low_margins">
-					<input type="text" class="text_input username" placeholder="Username"/>
-					<input type="password" class="text_input password" placeholder="Password"/>
+				<form id="signin_form" class="form_low_margins" onSubmit="return check_form(this)">
+					<input name="username" id="signin_username" type="text" class="text_input username" placeholder="Username"/>
+					<input name="password" id="signin_username" type="password" class="text_input password" placeholder="Password"/>
+					<button class="large_button" type="submit">
+						Submit
+					</button>
 				</form>
 				<div class="signin_links">
 					<a href="#" onclick="swap_box()">Sign Up</a>
@@ -222,6 +247,25 @@ function calendar_display() {
 					</button>
 					<button class="right_button">
 						Submit
+					</button>
+				</form>
+			</div>
+			<div id="signed_in_box" class="signed_in_box">
+				<div class="title_1">
+					My Account
+				</div>
+				<hr class="simple_margin"/>
+				<form class="form_low_margins" method="post" action="/createaccount">
+					<button class="large_button">
+						Create Event
+					</button>
+					<br/>
+					<button class="large_button">
+						My Account
+					</button>
+					<br/>
+					<button class="large_button">
+						Sign Out
 					</button>
 				</form>
 			</div>
@@ -259,7 +303,7 @@ function calendar_display() {
 						Mon 10/27
 					</td>
 					<td class="weekday_cell">
-						Sun 10/28
+						Tue 10/28
 					</td>
 					<td class="weekday_cell">
 						Wed 10/29

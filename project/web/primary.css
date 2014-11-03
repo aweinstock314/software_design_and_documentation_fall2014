@@ -25,15 +25,31 @@ body {
 .signin_box {
 	border: 1px black solid;
 	margin: 5px;
-	height: 150px;
+	padding: 5px;
 	border-radius: 5px;
 	background-color: white;
+}
+
+.error_box {
+	border: 1px red solid;
+	margin: 5px;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: pink;
 }
 
 .account_create_box {
 	border: 1px black solid;
 	margin: 5px;
-	height: 175px;
+	padding: 1px;
+	border-radius: 5px;
+	background-color: white;
+}
+
+.signed_in_box {
+	border: 1px black solid;
+	margin: 5px;
+	padding: 5px;
 	border-radius: 5px;
 	background-color: white;
 }
@@ -51,7 +67,7 @@ body {
 .title_1 {
 	font-size: 16pt;
 	font-family: Arial;
-	margin-left: 10%;
+	margin-left: 5%;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
@@ -94,6 +110,12 @@ body {
 
 .right_button {
 	margin-left: 10%;
+}
+
+.large_button {
+	margin: 6px 6px 6px 30px;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
 .tag_list {
