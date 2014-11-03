@@ -30,6 +30,7 @@ public class WebServer
                 serv.createContext("/clearcreds", fileServer).setAuthenticator(new ClearAuthenticator("epic_app"));
                 serv.createContext("/createaccount", new CreateAccount());
                 serv.createContext("/createevent", new CreateEvent());
+                serv.createContext("/signin", new TryLogin());
                 System.out.printf("Bound to port %s\n", port);
             }
             catch(Exception e) {e.printStackTrace();}
