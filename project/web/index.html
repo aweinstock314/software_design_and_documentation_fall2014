@@ -1,4 +1,5 @@
 <script type="text/javascript" src="jquery-latest.min.js"></script>
+<script type="text/javascript" src="formatString.js"></script>
 <script language="javascript">
 
 // Initialize global variables (filter and event arrays, array of events to display)
@@ -181,10 +182,17 @@ function calendar_display() {
 
 function check_form(form) {
 	var success_check = new XMLHttpRequest();
-	success_check.onload = console.log;
+	success_check.onload = function() {
+		console.log(this.responseText);
+	};
 	success_check.open("post", "/signin", true);
-	success_check.send(form);
-	console.log(form);
+	var fields = {
+		username: form.elements["username"].value,
+		password: form.elements["password"].value,
+	};
+	var data = "username={username}&password={password}".format(fields);
+	success_check.send(data);
+	return false;
 }
 
 /*	if ($('#signin_username').val() == '') {
