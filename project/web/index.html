@@ -181,17 +181,22 @@ function calendar_display() {
 }
 
 function check_form(form) {
-	var success_check = new XMLHttpRequest();
-	success_check.onload = function() {
-		console.log(this.responseText);
-	};
-	success_check.open("post", "/signin", true);
 	var fields = {
 		username: form.elements["username"].value,
 		password: form.elements["password"].value,
 	};
-	var data = "username={username}&password={password}".format(fields);
-	success_check.send(data);
+	$.ajax({
+		url: "/signin",
+		type: "POST",
+		data: fields,
+		dataType: "text",
+		success: function(response) {
+			console.log(response);
+			if(response === "SUCCESS") {
+				swap_box();
+			}
+		}
+	});
 	return false;
 }
 
