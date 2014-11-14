@@ -25,6 +25,42 @@ public class AccountModel
         }
         finally { db.close(); }
     }
+    public static ArrayList<String> getTagsForUser(DataSource ds, String username) throws SQLException
+    {
+        ArrayList<String> ret = new ArrayList<String>();
+        Connection db = ds.getConnection();
+        try
+        {
+            PreparedStatement ps = db.prepareStatement("SELECT tag FROM user_tags WHERE userid = ?");
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next())
+            {
+                ret.add(rs.getString(1));
+            }
+        }
+        finally { db.close(); }
+        return ret;
+    }
+    public static void setTagsForUser(DataSource ds, String username, ArrayList<String> tags) throws SQLException
+    {
+        Connection db = ds.getConnection();
+        try
+        {
+            PreparedStatement del = db.prepareStatement("DELETE FROM user_tags WHERE userid = ?");
+            del.setString(1, username);
+            del.executeUpdate();
+            del.close();
+            PreparedStatement add = db.prepareStatement("INSERT INTO user_tags (userid, tag) VALUES (?, ?)");
+            add.setString(1, username);
+            for(String tag : tags)
+            {
+                add.setString(2, tag);
+                add.executeUpdate();
+            }
+        }
+        finally { db.close(); }
+    }
     // createAccount, given account parameters, calls 
     //  GenericModel.insert to add account to "users" table in 
     //  database.  Values extracted from javascript create account 
