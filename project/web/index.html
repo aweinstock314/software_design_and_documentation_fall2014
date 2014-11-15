@@ -7,6 +7,7 @@ var filters = [];
 var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;
 //var events = [{name: "Partytime", id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414404415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}];
 var events_to_display = [];
+var global_username = null;
 
 // convert unix timestamp into modern date - rather than milliseconds since 1970!
 function timeConverter(UNIX_timestamp){
@@ -71,10 +72,10 @@ function add_tag(press) {
 	}
 }
 
-function swap_box() {
+function swap_box(box1, box2) {
 	// toggle whether signin or signup boxes are displayed.
-	$("#signin_box").toggle();
-	$("#account_create_box").toggle();
+	$('#'+box1).toggle();
+	$('#'+box2).toggle();
 }
 
 function calendar_update() {
@@ -193,11 +194,18 @@ function check_form(form) {
 		success: function(response) {
 			console.log(response);
 			if(response === "SUCCESS") {
-				swap_box();
+				swap_box("signin_box", "signed_in_box");
+				global_username = fields['username'];
+				$("#username_text").text(global_username);
 			}
 		}
 	});
 	return false;
+}
+
+function signout() {
+	swap_box("signin_box", "signed_in_box");
+	global_username = null;
 }
 
 /*	if ($('#signin_username').val() == '') {
@@ -242,7 +250,7 @@ function check_form(form) {
 					</button>
 				</form>
 				<div class="signin_links">
-					<a href="#" onclick="swap_box()">Sign Up</a>
+					<a href="#" onclick="swap_box('signin_box','account_create_box')">Sign Up</a>
 					<a href="#" class="right_link">Forgot your Password?</a>
 				</div>
 			</div>
@@ -255,7 +263,7 @@ function check_form(form) {
 					<input type="text" class="text_input username" name="createaccount_username" placeholder="Username"/>
 					<input type="password" class="text_input password" name="createaccount_password" placeholder="Password"/>
 					<input type="checkbox" class="epic_checkbox" name="createaccount_event_provider">Are you an event provider?</input>
-					<button class="left_button" onclick="swap_box(); return false;"> 
+					<button class="left_button" onclick="swap_box('signin_box', 'account_create_box'); return false;"> 
 						Cancel
 					</button>
 					<button class="right_button">
@@ -263,12 +271,12 @@ function check_form(form) {
 					</button>
 				</form>
 			</div>
-			<div id="signed_in_box" class="signed_in_box">
+			<div id="signed_in_box" class="signed_in_box hidden">
 				<div class="title_1">
-					My Account
+					Logged in - <span id="username_text" class="title_1"/>
 				</div>
 				<hr class="simple_margin"/>
-				<form class="form_low_margins" method="post" action="/createaccount">
+				<form class="form_low_margins" method="post">
 					<button class="large_button">
 						Create Event
 					</button>
@@ -277,7 +285,7 @@ function check_form(form) {
 						My Account
 					</button>
 					<br/>
-					<button class="large_button">
+					<button class="large_button" onclick="signout();">
 						Sign Out
 					</button>
 				</form>
