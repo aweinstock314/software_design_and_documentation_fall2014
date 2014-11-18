@@ -7,28 +7,14 @@ import org.junit.runners.JUnit4;
 
 import java.lang.Iterable;
 import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class FiniteCyclicIterableTest
 {
-    public static <E> Collection<E> collectionOfIterable(Iterable<E> iterable)
-    {
-        Collection<E> col = new ArrayList<E>();
-        for(E e : iterable) { col.add(e); }
-        return col;
-    }
-    public static <E> Collection<E> collectionLiteral(E... list)
-    {
-        Collection<E> col = new ArrayList<E>();
-        for(E e : list) { col.add(e); }
-        return col;
-    }
 
     @Test
     public void testEmptyFiniteCyclicIterableIsEmpty()
     {
-        assertEquals(collectionLiteral(), collectionOfIterable(new FiniteCyclicIterable("", 0)));
+        assertEquals(Util.collectionLiteral(), Util.collectionOfIterable(new FiniteCyclicIterable("", 0)));
     }
 
     @Test
@@ -36,7 +22,7 @@ public class FiniteCyclicIterableTest
     {
         for(int i : new Range(1, 100))
         {
-            assertEquals(i, collectionOfIterable(new FiniteCyclicIterable("", i)).size());
+            assertEquals(i, Util.collectionOfIterable(new FiniteCyclicIterable("", i)).size());
         }
     }
 
