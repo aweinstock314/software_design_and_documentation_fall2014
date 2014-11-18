@@ -30,4 +30,13 @@ public class FiniteCyclicIterableTest
     {
         assertEquals(collectionLiteral(), collectionOfIterable(new FiniteCyclicIterable("", 0)));
     }
+
+    @Test
+    public void testSizeOfFiniteCyclicIterableIsAsSpecified()
+    {
+        for(int i : new Range(1, 100))
+        {
+            assertEquals(i, collectionOfIterable(new FiniteCyclicIterable("", i)).size());
+        }
+    }
 }
