@@ -39,4 +39,11 @@ public class FiniteCyclicIterableTest
             assertEquals(i, collectionOfIterable(new FiniteCyclicIterable("", i)).size());
         }
     }
+
+    @Test
+    public void testGeneratesQuestionMarkString()
+    {
+        assertEquals(Util.joinIterable(new FiniteCyclicIterable("?", 40), ", ", "(", ")"),
+            "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    }
 }
