@@ -14,8 +14,10 @@ public class SaveUserTags extends PostRequestProcessor
 
     protected String processPostRequest(Map<String, String> postPairs) throws Exception
     {
+        // blindly trust the user on their username (TODO: authentication, possibly send a session token instead of "SUCCESS"/"FAILURE")
+        String username = URLDecoder.decode(postPairs.get("username"));
         JSONArray filters = (JSONArray)JSONValue.parse(URLDecoder.decode(postPairs.get("filters")));
-        System.out.println(filters);
+        System.out.printf("Username: \"%s\"\nFilters: \"%s\"\n\n", username, filters);
         return "a string";
     }
 }

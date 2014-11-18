@@ -69,6 +69,7 @@ function add_tag(press) {
 		// Add to list of tags for further manipulation.
 		filters.push(tag_id);
 		calendar_update();
+		save_user_tags(filters);
 	}
 }
 
@@ -201,6 +202,26 @@ function check_form(form) {
 		}
 	});
 	return false;
+}
+
+function save_user_tags(filters) {
+	if(global_username != null) {
+		filterstr = JSON.stringify(filters);
+		console.log(filterstr);
+		var fields = {
+			username: global_username,
+			filters: filterstr
+		};
+		$.ajax({
+			url: "/save_user_tags",
+			type: "POST",
+			data: fields,
+			dataType: "text",
+			success: function(response) {
+				console.log(response);
+			}
+		});
+	}
 }
 
 function signout() {
