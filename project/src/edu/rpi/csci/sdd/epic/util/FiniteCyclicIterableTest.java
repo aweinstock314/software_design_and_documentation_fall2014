@@ -2,8 +2,6 @@ package edu.rpi.csci.sdd.epic.util;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import java.lang.Iterable;
 import java.util.Iterator;
