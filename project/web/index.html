@@ -23,16 +23,10 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
-function add_tag(press) {
-	// Check to see which key has been pressed.
-	var code = (press.keyCode ? press.keyCode : press.which);
-
-	// If enter key is pressed, add tag:
-	if (code == 13) {
+function make_tag_node(tag_id) {
 		// Create all new HTML elements to generate tag.
 		var new_tag = document.createElement("li");
 		var inner_tag = document.createElement("span");
-		var tag_id = document.getElementById("tag_add").value;
 		var tag_text = document.createTextNode(tag_id);
 		var tag_remove = document.createElement("span");
 		var remove_text = document.createTextNode("x");
@@ -61,6 +55,18 @@ function add_tag(press) {
 		inner_tag.appendChild(tag_text);
 		inner_tag.appendChild(tag_remove);
 		tag_remove.appendChild(remove_text);
+
+		return new_tag;
+}
+
+function tag_typing_callback(press) {
+	// Check to see which key has been pressed.
+	var code = (press.keyCode ? press.keyCode : press.which);
+
+	// If enter key is pressed, add tag:
+	if (code == 13) {
+		var tag_id = document.getElementById("tag_add").value;
+		var new_tag = make_tag_node(tag_id);
 		$("#tag_list").append(new_tag);
 
 		// Reset add tag text field.
@@ -71,6 +77,18 @@ function add_tag(press) {
 		calendar_update();
 		save_user_tags(filters);
 	}
+}
+
+function set_tags_list(lst) {
+	filters = [];
+	$("#tag_list").empty();
+	for(var i = 0; i < lst.length; i++) {
+		var tag_id = lst[i];
+		var new_tag = make_tag_node(tag_id);
+		$("#tag_list").append(new_tag);
+		filters.push(tag_id);
+	}
+	calendar_update();
 }
 
 function swap_box(box1, box2) {
@@ -191,12 +209,14 @@ function check_form(form) {
 		url: "/signin",
 		type: "POST",
 		data: fields,
-		dataType: "text",
+		dataType: "json",
 		success: function(response) {
 			console.log(response);
-			if(response === "SUCCESS") {
+			if(response) {
 				swap_box("signin_box", "signed_in_box");
-				global_username = fields['username'];
+				global_username = response['username'];
+				global_user_token = response['unique_user_token'];
+				set_tags_list(response['stored_tags']);
 				$("#username_text").text(global_username);
 			}
 		}
@@ -317,7 +337,7 @@ function signout() {
 						Event Filters
 					</div>
 					<hr class="simple_margin"/>
-					<input id="tag_add" class="text_input" type="text" placeholder="Add Tags" onkeypress="add_tag(event)"/>
+					<input id="tag_add" class="text_input" type="text" placeholder="Add Tags" onkeypress="tag_typing_callback(event)"/>
 				</div>
 				<ul id="tag_list" class="tag_list">
 				</ul>
