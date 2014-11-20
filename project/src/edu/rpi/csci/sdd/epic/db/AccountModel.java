@@ -25,6 +25,19 @@ public class AccountModel
         }
         finally { db.close(); }
     }
+    public static boolean userIsEventProvider(DataSource ds, String username) throws SQLException
+    {
+        Connection db = ds.getConnection();
+        try
+        {
+            PreparedStatement ps = db.prepareStatement("SELECT event_provider FROM users WHERE username = ?");
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getBoolean(1);
+        }
+        finally { db.close(); }
+    }
     public static ArrayList<String> getTagsForUser(DataSource ds, String username) throws SQLException
     {
         ArrayList<String> ret = new ArrayList<String>();
