@@ -36,9 +36,14 @@ public class Scraper {
 	public void scrape() throws SQLException{
 		for(BaseEventParser p : eventParsers){
 			for(Event e : p.getEvents()){
-				EventModel.createEvent(e.getName(), e.getHost(), e.getSource(), e.getCreator(),  e.getRecurring(), e.getStart().getTime(), e.getEnd().getTime(), e.getLocation(), true);
-				System.out.println(e.getStart().toString());
-				System.out.println(e.getName());
+				if(EventModel.checkForDuplicateEvent(e.getName().replace("\'", ""), e.getStart().getTime(), e.getEnd().getTime())){
+					System.out.println("DUPLICATE: " + e.getName());
+				}
+				else{
+					EventModel.createEvent(e.getName().replace("\'", ""), e.getHost(), e.getSource(), e.getCreator(),  e.getRecurring(), e.getStart().getTime(), e.getEnd().getTime(), e.getLocation(), true);
+					System.out.println(e.getStart().toString());
+					System.out.println(e.getName());
+				}
 			}
 		}
 	}

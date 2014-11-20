@@ -79,8 +79,14 @@ public class TroyRecordEventParser extends BaseEventParser{
 			//System.out.println("End time: " + date + " " + end_time);
 
 			Event event = new Event(name, new Timestamp(start_date.getTime()), new Timestamp(end_date.getTime()));
+			event.setOnCampus(false);
+			event.setHost("Downtown Troy");
+			event.setSource("downtowntroy.org/special-events/events-calendar.html");
+			event.setCreator("TroyRecordEventParser");
+			event.setLocation("Downtown Troy");
 			return event;
-
+			
+	
 		}catch(IOException exc){
 			System.err.println("error connecting and getting information from: " + url);
 		}catch(ParseException p){

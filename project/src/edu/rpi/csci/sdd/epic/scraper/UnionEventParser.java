@@ -90,6 +90,9 @@ public class UnionEventParser extends BaseEventParser{
 		
 		Event e = new Event(eventName, new Timestamp(startdate.getTime()), new Timestamp(enddate.getTime()));
 		e.setLocation(location);
+		e.setHost("RPI Union");
+		e.setSource("events.rpi.edu/union/main/showMainEnd.rdo");
+		e.setCreator("UnionEventsParser");
 		return e;
 
 	}

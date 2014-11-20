@@ -37,6 +37,9 @@ public class RPIMainEventParser extends BaseEventParser{
 	public Event getEventFromElement(Element elem){
 
 		String name = elem.select("title").first().html();
+		String location = elem.html().substring(elem.html().indexOf("Where:")+6);
+		location = location.substring(0, location.indexOf("&lt"));
+	//	System.out.println(location);
 		if(name.length()>80) name = name.substring(0,79);
 		try{
 		
@@ -74,6 +77,11 @@ public class RPIMainEventParser extends BaseEventParser{
 				Date enddate = dateformat.parse(date + " " + endtime);
 				System.out.println(new Timestamp(startdate.getTime()).toString());
 				Event event = new Event(name, new Timestamp(startdate.getTime()), new Timestamp(enddate.getTime()));
+				event.setSource("http://events.rpi.edu/webcache/v1.0/rssDays/7/list-rss/no--filter.rss");
+				event.setCreator("RPIMainEventParser");
+				event.setHost("RPIMain");
+				
+				event.setLocation(location);
 				return event;
 			
 			}
