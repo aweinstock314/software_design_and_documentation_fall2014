@@ -48,6 +48,8 @@ function make_tag_node(tag_id) {
 			// destroy tag object and update calendar.
 			this.parentNode.removeChild(this);
 			calendar_update();
+			// save the tags (with the removal) to the database.
+			save_user_tags(filters);
 		};
 
 		// Append to create html structure and add to document.
