@@ -1,6 +1,7 @@
 .head_title {
 	font-size: 28pt;
 	font-family: Arial;
+	color: #2694E8;
 	margin-left: 4%;
 }
 
@@ -17,11 +18,20 @@
 }
 
 .signin_box {
-	border: 1px black solid;
+	border: 1px #AED0EA solid;
 	margin: 5px;
 	padding: 5px;
 	border-radius: 5px;
-	background-color: white;
+	background-color: #DEEDF7;
+}
+
+.filters {
+	border: 1px #AED0EA solid;
+	margin: 5px;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: #DEEDF7;
+	font-color: #FFF;
 }
 
 .error_box {
@@ -33,19 +43,19 @@
 }
 
 .account_create_box {
-	border: 1px black solid;
+	border: 1px #AED0EA solid;
 	margin: 5px;
 	padding: 1px;
 	border-radius: 5px;
-	background-color: white;
+	background-color: #DEEDF7;
 }
 
 .signed_in_box {
-	border: 1px black solid;
+	border: 1px #AED0EA solid;
 	margin: 5px;
 	padding: 5px;
 	border-radius: 5px;
-	background-color: white;
+	background-color: #DEEDF7;
 }
 
 .epic_checkbox {
@@ -99,11 +109,11 @@
 }
 
 .left_button {
-	margin-left: 22%;
+	margin-left: 10%;
 }
 
 .right_button {
-	margin-left: 10%;
+	margin-left: 15%;
 }
 
 .large_button {
@@ -170,15 +180,16 @@
 
 .tag_margin {
 	margin: 10px 0px 10px 0px;
+	color: white;
 }
 
 .tag {	
-	background-color: lightgrey;
+	background-color: #3BAAE3;
 	padding: 3px;
 	font-family: Arial;
 	font-size: 12px;
 	border-radius: 3px;
-	border: 1px grey solid;
+	border: 1px #AED0EA solid;
 }
 
 .remove_tag {

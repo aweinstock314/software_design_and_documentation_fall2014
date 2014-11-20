@@ -24,6 +24,8 @@
 var filters = [];
 var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;
 //var events = [{name: "Partytime", id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414409415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}, {name: "Second Event", id: 1, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414405415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}];
+//var events = [{name: "Partytime", id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414409415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}];
+//var events = [{name: "Special Events Committee Meeting", id: 35, host: "Downtown Troy", source: "downtowntroy.org/special-events/events-calendar.html", creator: "TroyRecordEventParser", recurring: false, starttime: 1415052000000, endtime: 1415055600000, location: "Downtown Troy", on_campus: true, tags: []}];
 var global_username = null;
 
 
@@ -41,6 +43,7 @@ function calendar_init() {
 		eventLimit: true, // allow "more" link when too many events
 		events: []
 	});
+	console.log("initialized calendar");
 
 	// Updates calendar with events from database.
 	calendar_update();
@@ -57,13 +60,13 @@ function calendar_update() {
 						valid_event = true;
 					}
 				}
-				if (events[i].name == filters[j]) {
+				if (events[i].name.contains(filters[j])) {
+					valid_event = true;
+				}
+				if (events[i].location.contains(filters[j])) {
 					valid_event = true;
 				}
 				if (events[i].host == filters[j]) {
-					valid_event = true;
-				}
-				if (events[i].location == filters[j]) {
 					valid_event = true;
 				}
 				if (events[i].creator == filters[j]) {
@@ -93,15 +96,13 @@ function add_event(event_to_add) {
 	if (event_to_add.endtime - event_to_add.starttime >= (24*60*60*1000)) {
 		allday = true;
 	}
-	console.log(event_to_add.name);
-	console.log(event_to_add.starttime);
-	console.log(event_to_add.endtime);
 	$('#calendar').fullCalendar('renderEvent', {
 		title: event_to_add.name,
 		start: event_to_add.starttime,
 		end: event_to_add.endtime,
 		allDay: allday
 	}, true)
+	console.log("added event!");
 }
 
 // Create new tag to add to list.
@@ -267,6 +268,8 @@ function signout() {
 </head>
 <body onload="calendar_init()">
 	<div class="left_bar">
+		<div id="error_box" class="error_box hidden">
+		</div>
 		<div id="signin_box" class="signin_box">
 			<div class="title_1">
 				Sign In
@@ -275,14 +278,13 @@ function signout() {
 			<form id="signin_form" class="form_low_margins" onSubmit="return check_form(this)">
 				<input name="username" id="signin_username" type="text" class="text_input username" placeholder="Username"/>
 				<input name="password" id="signin_username" type="password" class="text_input password" placeholder="Password"/>
-				<button class="large_button" type="submit">
+				<button class="left_button" type="submit">
 					Submit
 				</button>
+				<button class="right_button" onclick="swap_box('signin_box','account_create_box')">
+					Sign Up
+				</button>
 			</form>
-			<div class="signin_links">
-				<a href="#" onclick="swap_box('signin_box','account_create_box')">Sign Up</a>
-				<a href="#" class="right_link">Forgot your Password?</a>
-			</div>
 		</div>
 		<div id="account_create_box" class="account_create_box hidden">
 			<div class="title_1">
@@ -303,21 +305,41 @@ function signout() {
 		</div>
 		<div id="signed_in_box" class="signed_in_box hidden">
 			<div class="title_1">
-				Logged in - <span id="username_text" class="title_1"/>
+				Hello<span id="username_text" class="title_1"></span>!
 			</div>
 			<hr class="simple_margin"/>
-			<form class="form_low_margins" method="post">
-				<button class="large_button">
-					Create Event
+			<button class="large_button">
+				Create Event
+			</button>
+			<br/>
+			<button class="large_button">
+				My Account
+			</button>
+			<br/>
+			<button class="large_button" onclick="signout();">
+				Sign Out
+			</button>
+		</div>
+		<div id="event_create_box" class="account_create_box hidden">
+			<div class="title_1">
+				Create Event
+			</div>
+			<hr class="simple_margin"/>
+			<form method="post" action="/createevent">
+				Name: <input type="text" name="name" /><br />
+				Host: <input type="text" name="host" /><br />
+				Source: <input type="text" name="source" /><br />
+				Recurring: <input type="checkbox" name="recurring" /><br />
+				Start (milliseconds since Unix epoch): <input type="text" name="starttime" /><br />
+				End (milliseconds since Unix epoch): <input type="text" name="endtime" /><br />
+				Location: <input type="text" name="location" /><br />
+				On Campus: <input type="checkbox" name="oncampus" /><br />
+				<button class="left_button" onclick="swap_box('signed_in_box', 'event_create_box'); return false;"> 
+					Cancel
 				</button>
-				<br/>
-				<button class="large_button">
-					My Account
-				</button>
-				<br/>
-				<button class="large_button" onclick="signout();">
-					Sign Out
-				</button>
+				<button class="right_button">
+					Submit
+				</button>				
 			</form>
 		</div>
 		<div class="filters simple_margin">
