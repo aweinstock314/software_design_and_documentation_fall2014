@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Util
 {
@@ -81,5 +82,12 @@ public class Util
         Collection<E> col = new ArrayList<E>();
         for(E e : list) { col.add(e); }
         return col;
+    }
+    // http://stackoverflow.com/questions/93655/stripping-invalid-xml-characters-in-java
+    //static Pattern INVALID_XML_CHARS = Pattern.compile("[^\\u0009\\u000A\\u000D\\u0020-\\uD7FF\\uE000-\\uFFFD\uD800\uDC00-\uDBFF\uDFFF]");
+    static Pattern INVALID_XML_CHARS = Pattern.compile("[^\\u0009\\u000A\\u000D\\u0020-\\u007F]"); // printable ASCII-ish
+    public static String sanitizeStringForXml(String s)
+    {
+        return INVALID_XML_CHARS.matcher(s).replaceAll("");
     }
 }

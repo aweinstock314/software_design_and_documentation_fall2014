@@ -38,6 +38,6 @@ public class SimpleTemplater
             }
         }
         catch(Exception ex) { ex.printStackTrace(); }
-        return page;
+        return Util.sanitizeStringForXml(page);
     }
 }

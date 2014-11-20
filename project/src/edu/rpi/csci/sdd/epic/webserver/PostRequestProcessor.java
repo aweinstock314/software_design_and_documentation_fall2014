@@ -29,6 +29,7 @@ public abstract class PostRequestProcessor implements HttpHandler
         String postData = Util.slurpStream(e.getRequestBody());
         // if debugging output is enabled, log the url being served and the IP it's being served to
         if(DEBUG_MODE) { System.out.printf("Post request for page \"%s\" (from \"%s\")\n", e.getRequestURI(), e.getRemoteAddress()); }
+        if(DEBUG_MODE) { System.out.printf("Data: '''%s'''\n", postData); }
         // loop over the (key, value) pairs in the raw POST data
         for(String kvp : postData.trim().split("&"))
         {
