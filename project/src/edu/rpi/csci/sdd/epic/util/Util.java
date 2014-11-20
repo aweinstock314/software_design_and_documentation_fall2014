@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.lang.Iterable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -65,5 +66,20 @@ public class Util
         }
         sb.append(suffix);
         return sb.toString();
+    }
+    // collectionOfIterable returns a Collection object from the elements of an Iterable object
+    public static <E> Collection<E> collectionOfIterable(Iterable<E> iterable)
+    {
+        Collection<E> col = new ArrayList<E>();
+        for(E e : iterable) { col.add(e); }
+        return col;
+    }
+    // collectionLiteral makes a Collection object from its 
+    //  arguments, allowing for "literals" to compare against in tests
+    public static <E> Collection<E> collectionLiteral(E... list)
+    {
+        Collection<E> col = new ArrayList<E>();
+        for(E e : list) { col.add(e); }
+        return col;
     }
 }
