@@ -13,14 +13,15 @@ public class EventModel
 {
     public static void createEvent(String name, String host, String source, String creator, boolean recurring, long starttime, long endtime, String location, boolean on_campus) throws SQLException
     {
+	System.out.println(new Date(starttime).toString());
         Map<String, Object> vals = new LinkedHashMap<String, Object>();
         vals.put("name", name);
         vals.put("host", host);
         vals.put("source", source);
         vals.put("creator", creator);
         vals.put("recurring", recurring);
-        vals.put("starttime", new Date(starttime));
-        vals.put("endtime", new Date(endtime));
+        vals.put("starttime", new Timestamp(starttime));
+        vals.put("endtime", new Timestamp(endtime));
         vals.put("location", location);
         vals.put("on_campus", on_campus);
         GenericModel.insert(DBUtil.getCredentialedDataSource(), "events", vals);
