@@ -1,9 +1,3 @@
-body {
-	margin: 5px;
-	padding: 0;
-	background-color: #EEEEEE;
-}
-
 .head_title {
 	font-size: 28pt;
 	font-family: Arial;
@@ -126,7 +120,7 @@ body {
 }
 
 .calendar_section {
-	float: right;
+	float: left;
 	width: 79%;
 	height: 600px;
 	padding-top: 3px;

@@ -55,8 +55,8 @@ public class EventModel
                 String source = rs.getString(4);
                 String creator = rs.getString(5);
                 boolean recurring = rs.getBoolean(6);
-                long starttime = rs.getDate(7).getTime();
-                long endtime = rs.getDate(8).getTime();
+                long starttime = rs.getTimestamp(7).getTime();
+                long endtime = rs.getTimestamp(8).getTime();
                 String location = rs.getString(9);
                 boolean on_campus = rs.getBoolean(10);
                 String tagsJSArray = getTagsArray(id);
