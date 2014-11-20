@@ -96,6 +96,7 @@ function add_event(event_to_add) {
 	if (event_to_add.endtime - event_to_add.starttime >= (24*60*60*1000)) {
 		allday = true;
 	}
+	console.log(event_to_add.name);
 	$('#calendar').fullCalendar('renderEvent', {
 		title: event_to_add.name,
 		start: event_to_add.starttime,
@@ -308,7 +309,7 @@ function signout() {
 				Hello<span id="username_text" class="title_1"></span>!
 			</div>
 			<hr class="simple_margin"/>
-			<button class="large_button">
+			<button class="large_button" onclick="swap_box('signed_in_box', 'event_create_box');">
 				Create Event
 			</button>
 			<br/>
@@ -326,14 +327,14 @@ function signout() {
 			</div>
 			<hr class="simple_margin"/>
 			<form method="post" action="/createevent">
-				Name: <input type="text" name="name" /><br />
-				Host: <input type="text" name="host" /><br />
-				Source: <input type="text" name="source" /><br />
-				Recurring: <input type="checkbox" name="recurring" /><br />
-				Start (milliseconds since Unix epoch): <input type="text" name="starttime" /><br />
-				End (milliseconds since Unix epoch): <input type="text" name="endtime" /><br />
-				Location: <input type="text" name="location" /><br />
-				On Campus: <input type="checkbox" name="oncampus" /><br />
+				<input type="text" class="text_input username" name="name" placeholder="Name" /><br />
+				<input type="text" class="text_input username" name="host" placeholder="Host" /><br />
+				<input type="text" class="text_input username" name="source" placeholder="Source"/><br />
+				<input type="checkbox" name="recurring" />Recurring?<br /> 
+				<input type="text" class="text_input username" name="starttime" placeholder="Starttime (UNIX timestamp)"/><br />
+				<input type="text" class="text_input username" name="endtime" placeholder="Endtime (UNIX timestamp)"/><br />
+				<input type="text" class="text_input username" name="location" placeholder="Location"/><br />
+				<input type="checkbox" name="oncampus" />On Campus?<br /> 
 				<button class="left_button" onclick="swap_box('signed_in_box', 'event_create_box'); return false;"> 
 					Cancel
 				</button>

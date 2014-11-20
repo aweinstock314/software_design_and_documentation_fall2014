@@ -29,7 +29,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: event_tags; Type: TABLE; Schema: public; Owner: mcguik2; Tablespace: 
+-- Name: event_tags; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE event_tags (
@@ -38,10 +38,10 @@ CREATE TABLE event_tags (
 );
 
 
-ALTER TABLE public.event_tags OWNER TO mcguik2;
+ALTER TABLE public.event_tags OWNER TO postgres;
 
 --
--- Name: events; Type: TABLE; Schema: public; Owner: mcguik2; Tablespace: 
+-- Name: events; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE events (
@@ -58,10 +58,10 @@ CREATE TABLE events (
 );
 
 
-ALTER TABLE public.events OWNER TO mcguik2;
+ALTER TABLE public.events OWNER TO postgres;
 
 --
--- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: mcguik2
+-- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE events_id_seq
@@ -72,10 +72,10 @@ CREATE SEQUENCE events_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.events_id_seq OWNER TO mcguik2;
+ALTER TABLE public.events_id_seq OWNER TO postgres;
 
 --
--- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mcguik2
+-- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE events_id_seq OWNED BY events.id;
@@ -122,14 +122,14 @@ CREATE TABLE users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: mcguik2
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
 
 
 --
--- Data for Name: event_tags; Type: TABLE DATA; Schema: public; Owner: mcguik2
+-- Data for Name: event_tags; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY event_tags (id, tag) FROM stdin;
@@ -137,7 +137,7 @@ COPY event_tags (id, tag) FROM stdin;
 
 
 --
--- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: mcguik2
+-- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY events (id, name, host, source, creator, recurring, starttime, endtime, location, on_campus) FROM stdin;
@@ -177,7 +177,7 @@ COPY events (id, name, host, source, creator, recurring, starttime, endtime, loc
 
 
 --
--- Name: events_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mcguik2
+-- Name: events_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('events_id_seq', 32, true);

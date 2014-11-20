@@ -67,7 +67,7 @@ public class EventModel
         return Util.joinIterable(results, ", ", "[", "]");
     }
     public static String getTagsArray(int eventId) throws SQLException
-    {
+    {/*var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;*/
         ArrayList<String> results = new ArrayList();
         Connection db = DBUtil.getCredentialedDataSource().getConnection();
         try
