@@ -261,4 +261,15 @@ public class UtilTest
             }, "UTF8")
         );
     }
+    @Test
+    public void testCollectionLiteralEquality()
+    {
+        Object o1 = Util.collectionLiteral("a", "b", "c");
+        Object o2 = Util.collectionLiteral("a", "b", "c");
+        Object o3 = Util.collectionLiteral("d", "e", "f");
+        // object vs reference equality
+        assertEquals(o1, o2);
+        assertTrue(o1 != o2);
+        assertTrue(!(o1.equals(o3)));
+    }
 }
