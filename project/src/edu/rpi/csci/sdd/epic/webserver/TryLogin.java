@@ -2,6 +2,7 @@ package edu.rpi.csci.sdd.epic.webserver;
 
 import java.util.ArrayList;
 import java.util.Map;
+import javax.sql.DataSource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -31,8 +32,10 @@ public class TryLogin extends PostRequestProcessor
             // TODO: return and store unique token, use for validation of set requests
             response.put("unique_user_token", "0xdeadbeef");
             response.put("username", username);
-            ArrayList<String> filters = AccountModel.getTagsForUser(DBUtil.getCredentialedDataSource(), username);
+            DataSource ds = DBUtil.getCredentialedDataSource();
+            ArrayList<String> filters = AccountModel.getTagsForUser(ds, username);
             response.put("stored_tags", filters);
+            response.put("event_provider", AccountModel.userIsEventProvider(ds, username));
             System.out.println(response.toJSONString());
             return response.toJSONString();
         }
@@ -57,6 +60,8 @@ public class TryLogin extends PostRequestProcessor
             currentUser.logout();
             return true;
         }
+
+        // As usual, print stack trace on exception.
         catch(Exception e)
         {
             e.printStackTrace();

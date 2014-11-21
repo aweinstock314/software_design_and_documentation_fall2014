@@ -4,9 +4,10 @@ import java.util.Map;
 
 import edu.rpi.csci.sdd.epic.db.AccountModel;
 
-// CreateAccount creates an account in the database with information pulled from a post request
+// Creates an account in the database with information pulled from a post request
 public class CreateAccount extends PostRequestProcessor
 {
+    // Generates brief html page displaying success.
     protected static final String successPage =
         "<html><head><title>Account created</title></head><body>Account created successfully.</body></html>";
 

@@ -14,6 +14,8 @@ public class SimpleTemplater
     {
         port = p;
     }
+
+    // Used to replace XML statements client-side with appropriate database or user information.
     public String template(HttpExchange e, String page)
     {
         try
@@ -27,6 +29,7 @@ public class SimpleTemplater
                 String requestPath = e.getRequestURI().getPath();
                 page = page.replace("<!--REQUESTED-PAGE-->", "epic.server.name:"+port+requestPath);
             }
+
             if(page.contains("<!--HANDLE-LOGIN-->"))
             {
                 //us.doLogin(e);
@@ -37,6 +40,8 @@ public class SimpleTemplater
                 page = page.replace("<!--INSERT-EVENTS-DB-AS-JS-ARRAY-->", EventModel.getEventsAsJSArray());
             }
         }
+
+        // Print the stack if the above fails.
         catch(Exception ex) { ex.printStackTrace(); }
         return Util.sanitizeStringForXml(page);
     }

@@ -9,7 +9,7 @@
 	<div class="head_subtitle">
 		Search for events, or sign in to set your preferences!
 	</div>
-<meta charset='utf-8' />
+<meta charset='utf-8' /> 
 <script type="text/javascript" src="/jquery-latest.min.js"></script>
 <link rel='stylesheet' href='fullcalendar-2.2.2/lib/cupertino/jquery-ui.min.css' />
 <link href='fullcalendar-2.2.2/fullcalendar.css' rel='stylesheet' />
@@ -17,20 +17,17 @@
 <script src='fullcalendar-2.2.2/lib/moment.min.js'></script>
 <script src='fullcalendar-2.2.2/fullcalendar.js'></script>
 <script type="text/javascript" src="formatString.js"></script>
-
 <script>
 
-// Initialize global variables (filter and event arrays, array of events to display)
+// Initialize global variables (filter and event arrays, global username)
 var filters = [];
 var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;
-//var events = [{name: "Partytime", id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414409415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}, {name: "Second Event", id: 1, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414405415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}];
-//var events = [{name: "Partytime", id: 0, host: "RPI", source: "localhost", creator: "propernoun123", recurring: true, starttime: 1414404305000, endtime: 1414409415000, location: "Union McNeil Room", on_campus: true, tags: ["tag1", "tag2"]}];
-//var events = [{name: "Special Events Committee Meeting", id: 35, host: "Downtown Troy", source: "downtowntroy.org/special-events/events-calendar.html", creator: "TroyRecordEventParser", recurring: false, starttime: 1415052000000, endtime: 1415055600000, location: "Downtown Troy", on_campus: true, tags: []}];
 var global_username = null;
-
+var global_event_create = null;
 
 // Initializes calendar on page load.
 function calendar_init() {
+	//.fullCalendar implemented within fullcalendar open source plugin.
 	$('#calendar').fullCalendar({
 		theme: true,
 		header: {
@@ -43,13 +40,17 @@ function calendar_init() {
 		eventLimit: true, // allow "more" link when too many events
 		events: []
 	});
-	console.log("initialized calendar");
-
 	// Updates calendar with events from database.
 	calendar_update();
 }
 
+// Checks all events vs filter list to update calendar.  Removes events, then compares events vs filter list at O(mno) efficiency.
+// This may still be optimized further to assist with page load speed. For each event, checks all filters and sees if any filters 
+// match the host, creator, event tags, or if the event's name or description contains the tag.
+
 function calendar_update() {
+
+	// removes all events.  
 	$('#calendar').fullCalendar('removeEvents');
 	if (filters.length > 0) {
 		for (var i = 0; i < events.length; i++) {
@@ -60,6 +61,8 @@ function calendar_update() {
 						valid_event = true;
 					}
 				}
+
+				// If the tag is a substring 
 				if (events[i].name.contains(filters[j])) {
 					valid_event = true;
 				}
@@ -89,68 +92,65 @@ function calendar_update() {
 
 // Add event to the calendar.
 function add_event(event_to_add) {
-	// Calculate dates and times for the event.
-	//var start_time = moment(event_to_add.starttime);
-	//var end_time = moment(event_to_add.endtime);
+	// Check to see if the event stretches across more than 24 hours.
 	var allday = false;
 	if (event_to_add.endtime - event_to_add.starttime >= (24*60*60*1000)) {
 		allday = true;
 	}
+
+	// Add event to calendar!
 	$('#calendar').fullCalendar('renderEvent', {
 		title: event_to_add.name,
 		start: event_to_add.starttime,
 		end: event_to_add.endtime,
 		allDay: allday
 	}, true)
-	console.log("added event!");
 }
 
 // Create new tag to add to list.
 function make_tag_node(tag_id) {
-		// Create all new HTML elements to generate tag.
-		var new_tag = document.createElement("li");
-		var inner_tag = document.createElement("span");
-		var tag_text = document.createTextNode(tag_id);
-		var tag_remove = document.createElement("span");
-		var remove_text = document.createTextNode("x");
+	// Create all new HTML elements to generate tag.
+	var new_tag = document.createElement("li");
+	var inner_tag = document.createElement("span");
+	var tag_text = document.createTextNode(tag_id);
+	var tag_remove = document.createElement("span");
+	var remove_text = document.createTextNode("x");
 
-		// Set tag id for further manipulation.
-		new_tag.id = tag_id;
+	// Set tag id for further manipulation.
+	new_tag.id = tag_id;
 
-		// Set css styling
-		new_tag.className = "tag_margin";
-		inner_tag.className = "tag";		
-		tag_remove.className = "remove_tag";
-		new_tag.onclick = function() {
-			// remove tag from global list of tags.
-			for(var i = filters.length - 1; i >= 0; i--) {
-			    if(filters[i] === this.id) {
-			       filters.splice(i, 1);
-			    }
-			}
-			// destroy tag object and update calendar.
-			this.parentNode.removeChild(this);
-			calendar_update();
-			// save the tags (with the removal) to the database.
-			save_user_tags(filters);
-		};
+	// Set css styling
+	new_tag.className = "tag_margin";
+	inner_tag.className = "tag";		
+	tag_remove.className = "remove_tag";
+	new_tag.onclick = function() {
+		// remove tag from global list of tags.
+		for(var i = filters.length - 1; i >= 0; i--) {
+		    if(filters[i] === this.id) {
+		       filters.splice(i, 1);
+		    }
+		}
+		// destroy tag object and update calendar.
+		this.parentNode.removeChild(this);
+		calendar_update();
+		// save the tags (with the removal) to the database.
+		save_user_tags(filters);
+	};
 
-		// Append to create html structure and add to document.
-		new_tag.appendChild(inner_tag);
-		inner_tag.appendChild(tag_text);
-		inner_tag.appendChild(tag_remove);
-		tag_remove.appendChild(remove_text);
-
-		return new_tag;
+	// Append to create html structure and add to document.
+	new_tag.appendChild(inner_tag);
+	inner_tag.appendChild(tag_text);
+	inner_tag.appendChild(tag_remove);
+	tag_remove.appendChild(remove_text);
+	return new_tag;
 }
 
 // Called upon key press in filter entry field to add tags.
 function tag_typing_callback(press) {
 	// Check to see which key has been pressed.
 	var code = (press.keyCode ? press.keyCode : press.which);
-	var update = false;
 	// If enter key is pressed, add tag:
-	if (code == 13) {
+	if (code == 13 && (document.getElementById("tag_add").value != document.getElementById("tag_add").defaultValue)) {
 		var tag_id = document.getElementById("tag_add").value;
 		var new_tag = make_tag_node(tag_id);
 		$("#tag_list").append(new_tag);
@@ -161,13 +161,11 @@ function tag_typing_callback(press) {
 		// Add to list of tags for further manipulation.
 		filters.push(tag_id);
 		calendar_update();
-		update = true;
-	}
-	if (update == true) {
 		save_user_tags(filters);
 	}
 }
 
+// remember user's preferences by setting filter list equal to their stored tags
 function set_tags_list(lst) {
 	filters = [];
 	$("#tag_list").empty();
@@ -177,11 +175,12 @@ function set_tags_list(lst) {
 		$("#tag_list").append(new_tag);
 		filters.push(tag_id);
 	}
+	// update calendar accordingly.
 	calendar_update();
 }
 
+// Used to switch between the various UI boxes.
 function swap_box(box1, box2) {
-	// toggle whether signin or signup boxes are displayed.
 	$('#'+box1).toggle();
 	$('#'+box2).toggle();
 }
@@ -194,10 +193,23 @@ function calendar_clear() {
 
 // Used to sign user in. 
 function check_form(form) {
+
+	// Show error if username or password is blank.
+	if (form.elements["username"].value == form.elements["username"].defaultValue) {
+		show_error_box("Please enter your username.");		
+
+	}
+	else if (form.elements["password"].value == form.elements["password"].defaultValue) {
+		show_error_box("Please enter your password.");		
+	}
+
+	// Initialize user + password for validation.
 	var fields = {
 		username: form.elements["username"].value,
 		password: form.elements["password"].value,
 	};
+
+	// Sign in + validate user.
 	$.ajax({
 		url: "/signin",
 		type: "POST",
@@ -207,14 +219,25 @@ function check_form(form) {
 		mimeType: "text/html",
 		success: function(response) {
 			console.log(response);
+
+			// If call succeeds, hide event box, and sign user in.
 			if(response) {
 				swap_box("signin_box", "signed_in_box");
-				global_username = response['username'];
+				if (response['event_provider'] == false) {
+					$('#create_event_button').hide();
+				}				global_username = response['username'];
 				global_user_token = response['unique_user_token'];
 				set_tags_list(response['stored_tags']);
 				$("#username_text").text(global_username);
+
+				// hide error if displayed.
+				hide_error_box();
 			}
-		}
+			// Display error if call fails.
+			else {
+				show_error_box("Invalid username / password combination.");
+			}
+		},
 	});
 	return false;
 }
@@ -249,6 +272,18 @@ function signout() {
 	global_username = null;
 }
 
+// display error box; add appropriate string.
+function show_error_box(text) {
+	$('#error_box').show();
+	$('#error_box').text(text);
+}
+
+// hide error box; empty its text
+function hide_error_box() {
+	$('#error_box').hide();
+	$('#error_box').text('');
+}
+
 </script>
 <style>
 
@@ -260,7 +295,7 @@ function signout() {
 	}
 
 	#calendar {
-		max-width: 900px;
+		max-width: 1200px;
 		margin: 0 auto;
 	}
 
@@ -281,7 +316,7 @@ function signout() {
 				<button class="left_button" type="submit">
 					Submit
 				</button>
-				<button class="right_button" onclick="swap_box('signin_box','account_create_box')">
+				<button class="right_button" onclick="swap_box('signin_box','account_create_box'); return false;">
 					Sign Up
 				</button>
 			</form>
@@ -303,12 +338,12 @@ function signout() {
 				</button>
 			</form>
 		</div>
-		<div id="signed_in_box" class="signed_in_box hidden">
+		<div id="signed_in_box" class="signed_in_box hidden">	
 			<div class="title_1">
 				Hello<span id="username_text" class="title_1"></span>!
 			</div>
 			<hr class="simple_margin"/>
-			<button class="large_button" onclick="swap_box('signed_in_box', 'event_create_box'); return false;">
+			<button id="create_event_button" class="large_button" onclick="swap_box('signed_in_box', 'event_create_box');">
 				Create Event
 			</button>
 			<br/>
@@ -326,14 +361,14 @@ function signout() {
 			</div>
 			<hr class="simple_margin"/>
 			<form method="post" action="/createevent">
-				Name: <input type="text" name="name" /><br />
-				Host: <input type="text" name="host" /><br />
-				Source: <input type="text" name="source" /><br />
-				Recurring: <input type="checkbox" name="recurring" /><br />
-				Start (milliseconds since Unix epoch): <input type="text" name="starttime" /><br />
-				End (milliseconds since Unix epoch): <input type="text" name="endtime" /><br />
-				Location: <input type="text" name="location" /><br />
-				On Campus: <input type="checkbox" name="oncampus" /><br />
+				<input type="text" class="text_input username" name="name" placeholder="Name" /><br />
+				<input type="text" class="text_input username" name="host" placeholder="Host" /><br />
+				<input type="text" class="text_input username" name="source" placeholder="Source"/><br />
+				<input type="checkbox" name="recurring" />Recurring?<br /> 
+				<input type="text" class="text_input username" name="starttime" placeholder="Starttime (UNIX timestamp)"/><br />
+				<input type="text" class="text_input username" name="endtime" placeholder="Endtime (UNIX timestamp)"/><br />
+				<input type="text" class="text_input username" name="location" placeholder="Location"/><br />
+				<input type="checkbox" name="oncampus" />On Campus?<br /> 
 				<button class="left_button" onclick="swap_box('signed_in_box', 'event_create_box'); return false;"> 
 					Cancel
 				</button>

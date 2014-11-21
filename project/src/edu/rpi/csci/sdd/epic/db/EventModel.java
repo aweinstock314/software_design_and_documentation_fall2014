@@ -75,7 +75,7 @@ public class EventModel
     }
     //gets the saved event tags in the event tags table in the database to be used in the searchByTag use case in the user interface.
     public static String getTagsArray(int eventId) throws SQLException
-    {
+    {/*var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;*/
         ArrayList<String> results = new ArrayList();
         Connection db = DBUtil.getCredentialedDataSource().getConnection();
         try

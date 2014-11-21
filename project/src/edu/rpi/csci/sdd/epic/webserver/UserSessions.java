@@ -25,10 +25,13 @@ import edu.rpi.csci.sdd.epic.util.Util;
 //   base64("username:password")
 public class UserSessions extends BasicAuthenticator
 {
+    // Constructor
     public UserSessions(String realm)
     {
         super(realm);
     }
+
+    // sets the security manager for a secure connection to the database
     public static void setSecurityManager()
     {
         Factory<SecurityManager> factory = new IniSecurityManagerFactory("sample_accounts.ini");
@@ -38,6 +41,8 @@ public class UserSessions extends BasicAuthenticator
         ((RealmSecurityManager)securityManager).setRealm(databaseRealm);
         SecurityUtils.setSecurityManager(securityManager);
     }
+
+    // Handle the user's secure login to the database.
     protected Map<InetSocketAddress, Subject> addressSubjectMapping = new HashMap<InetSocketAddress, Subject>();
     public void doLogin(HttpExchange e)
     {
@@ -45,9 +50,13 @@ public class UserSessions extends BasicAuthenticator
         String username = "username";
         String password = "password";
         System.out.printf("Handling a login for %s: (\"%s\", \"%s\")\n", address, username, password);
+
+        // Checks credentials.
         System.out.printf("Login was %s.\n",
             (checkCredentials(username, password) ? "successful" : "unsuccessful"));
     }
+
+    // Verifies the user's credentials (proper password for username)
     public boolean checkCredentials(String username, String password)
     {
         System.out.printf("Handling a login: (\"%s\", \"%s\")\n", username, password);
@@ -58,6 +67,8 @@ public class UserSessions extends BasicAuthenticator
             currentUser.login(token);
             return true;
         }
+
+        // Print stack trace on exception.
         catch(Exception e)
         {
             e.printStackTrace();
