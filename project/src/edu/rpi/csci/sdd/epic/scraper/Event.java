@@ -3,7 +3,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
-
+//provides a representation of the Event object.
 public class Event {
 
 	private String host;
@@ -16,7 +16,9 @@ public class Event {
 	private String source;
 	private String creator;
 	
+	//create the event with the given values for required variables, and the default values for the optional variables.
 	public Event(String name, Timestamp start, Timestamp end){
+		//required variables
 		this.name = name;
 		this.start = start;
 		this.end = end;
@@ -30,6 +32,9 @@ public class Event {
 		this.creator = "unknown";
 	}
 
+	//getters and setters for each variable:
+	
+	//Location of the event
 	public String getLocation() {
 		return location;
 	}
@@ -38,6 +43,7 @@ public class Event {
 		this.location = location;
 	}
 	
+	//start and end times and dates for the event.
 	public Timestamp getStart(){
 		return start;
 	}
@@ -46,10 +52,12 @@ public class Event {
 		return end;
 	}
 
+	//title of the event.
 	public String getName(){
 		return name;
 	}
 	
+	//the organization that is hosting the event.
 	public void setHost(String host){
 		 this.host = host;
 	}
@@ -58,6 +66,7 @@ public class Event {
 		return host;
 	}
 
+	//whether the event is recurring
 	public void setRecurring(boolean b){
 		this.recurring = b;
 	}
@@ -66,6 +75,7 @@ public class Event {
 		return recurring;
 	}
 	
+	//whether the event is on or off RPI campus
 	public void setOnCampus(boolean b){
 		this.on_campus = b;
 	}
@@ -74,6 +84,7 @@ public class Event {
 		return on_campus;
 	}
 
+	//the source website of the event that the scraper used.
 	public void setSource(String source){
 		this.source = source;
 	}
@@ -82,6 +93,7 @@ public class Event {
 		return source;
 	}
 
+	//the creator of the event if a user created it.
 	public void setCreator(String creator){
 		this.creator = creator;
 	}

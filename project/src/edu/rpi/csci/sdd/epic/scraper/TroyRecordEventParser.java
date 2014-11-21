@@ -14,12 +14,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+//This parser allows the scraping of the Downtown Troy BID event calendar on their website.
 public class TroyRecordEventParser extends BaseEventParser{
 
+	//constructor initializing the superclass, which connects to the url and creates a JSoup document.
 	public TroyRecordEventParser(String url) throws IOException{
 		super(url);
 	}
 
+	//Overrides the getEvents in BaseEventParser. Parses all events from the Troy BID calendar into a vector.
 	@Override
 	public Vector<Event> getEvents(){
 		Document doc = getDoc();
@@ -38,6 +41,7 @@ public class TroyRecordEventParser extends BaseEventParser{
 		return events;
 	}
 
+	//Parses out all event information and creates an Event object from the html element.
 	public Event getEventFromElement(Element e){
 		//System.out.println("\nEVENTMIDDLE:\n"+eventStr);
 		

@@ -20,7 +20,7 @@ public class Scraper {
 
 	private Vector<BaseEventParser> eventParsers;
 
-	//connects to the website, gets the html, and parses out the events.
+	//Initializes which event parsers the scraper will use and which websites it will scrape from.
 	public Scraper() throws IOException, SQLException{
 		eventParsers = new Vector<BaseEventParser>();
 
@@ -36,9 +36,11 @@ public class Scraper {
 	public void scrape() throws SQLException{
 		for(BaseEventParser p : eventParsers){
 			for(Event e : p.getEvents()){
+				//checks for duplicate events to make sure events are not accidently stored twice.
 				if(EventModel.checkForDuplicateEvent(e.getName().replace("\'", ""), e.getStart().getTime(), e.getEnd().getTime())){
 					System.out.println("DUPLICATE: " + e.getName());
 				}
+				//creates an event in the database.
 				else{
 					EventModel.createEvent(e.getName().replace("\'", ""), e.getHost(), e.getSource(), e.getCreator(),  e.getRecurring(), e.getStart().getTime(), e.getEnd().getTime(), e.getLocation(), true);
 					System.out.println(e.getStart().toString());
@@ -48,6 +50,7 @@ public class Scraper {
 		}
 	}
 	
+	//runs the scraper on its own to add all events to the database.
 	public static void main(String[] args) throws IOException, ParseException, SQLException{
 		Scraper scraper = new Scraper();
 		scraper.scrape();

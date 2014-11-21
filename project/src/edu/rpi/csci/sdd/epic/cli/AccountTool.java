@@ -4,6 +4,7 @@ import java.util.TreeMap;
 
 import edu.rpi.csci.sdd.epic.db.AccountModel;
 
+//general SubCommand class to provide more generality.
 abstract class SubCommand
 {
     public abstract String usage();
@@ -16,6 +17,7 @@ abstract class SubCommand
     }
 }
 
+//tool used to create and manage user accounts.
 public class AccountTool
 {
     static final TreeMap<String, SubCommand> commands = new TreeMap<String, SubCommand>();
@@ -35,6 +37,7 @@ public class AccountTool
             }
         });
     }
+//runs the first command to test account creation manually through command line.
     public static void main(String[] args)
     {
         if(args.length > 0) { commands.get(args[0]).run(args); }

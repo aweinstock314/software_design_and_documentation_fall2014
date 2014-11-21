@@ -9,8 +9,10 @@ import java.util.ArrayList;
 
 import edu.rpi.csci.sdd.epic.util.Util;
 
+//This class interacts with the Events table in the database.
 public class EventModel
 {
+    //creates an event with the given information in the events table in the database.
     public static void createEvent(String name, String host, String source, String creator, boolean recurring, long starttime, long endtime, String location, boolean on_campus) throws SQLException
     {
 	System.out.println(new Date(starttime).toString());
@@ -26,6 +28,7 @@ public class EventModel
         vals.put("on_campus", on_campus);
         GenericModel.insert(DBUtil.getCredentialedDataSource(), "events", vals);
     }
+	//checks if an event already exists in the database to ensure that no duplicate events are created.
 	public static boolean checkForDuplicateEvent(String name, long starttime, long endtime) throws SQLException
 	{
 		Connection db = DBUtil.getCredentialedDataSource().getConnection();
@@ -40,12 +43,15 @@ public class EventModel
 		if(rs.next()) return true;
 		else return false;
 	} 
+    //gets all the events as a JavaScript array to use in the User Interface.
     public static String getEventsAsJSArray() throws SQLException
     {
         ArrayList<String> results = new ArrayList();
+	//connects to the database
         Connection db = DBUtil.getCredentialedDataSource().getConnection();
         try
         {
+	    //selects the event information in the database
             ResultSet rs = db.createStatement().executeQuery("SELECT name, id, host, source, creator, recurring, starttime, endtime, location, on_campus FROM events");
             while(rs.next())
             {
@@ -60,12 +66,14 @@ public class EventModel
                 String location = rs.getString(9);
                 boolean on_campus = rs.getBoolean(10);
                 String tagsJSArray = getTagsArray(id);
+		//adds the database results to the JavaScript array.
                 results.add(String.format("{name: \"%s\", id: %d, host: \"%s\", source: \"%s\", creator: \"%s\", recurring: %b, starttime: %d, endtime: %d, location: \"%s\", on_campus: %b, tags: %s}", name, id, host, source, creator, recurring, starttime, endtime, location, on_campus, tagsJSArray));
             }
         }
         finally { db.close(); }
         return Util.joinIterable(results, ", ", "[", "]");
     }
+    //gets the saved event tags in the event tags table in the database to be used in the searchByTag use case in the user interface.
     public static String getTagsArray(int eventId) throws SQLException
     {
         ArrayList<String> results = new ArrayList();

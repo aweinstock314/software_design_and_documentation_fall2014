@@ -9,11 +9,11 @@ import javax.sql.DataSource;
 
 import edu.rpi.csci.sdd.epic.util.Util;
 
+//Used to interact with the User Accounts table in the database.
 public class AccountModel
 {
     // userExists(ds, username) checks to see if the user 
     //  named by username already exists in the database 
-    //  represented by ds
     public static boolean userExists(DataSource ds, String username) throws SQLException
     {
         Connection db = ds.getConnection();
@@ -25,6 +25,7 @@ public class AccountModel
         }
         finally { db.close(); }
     }
+    //connects to the database and gets the saved tag preferences for the user.
     public static ArrayList<String> getTagsForUser(DataSource ds, String username) throws SQLException
     {
         ArrayList<String> ret = new ArrayList<String>();
@@ -42,6 +43,7 @@ public class AccountModel
         finally { db.close(); }
         return ret;
     }
+    //connects to the database and sets the saved tag preferences for the user.
     public static void setTagsForUser(DataSource ds, String username, ArrayList<String> tags) throws SQLException
     {
         Connection db = ds.getConnection();

@@ -14,12 +14,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+//allows for the scraping of the Union Event Calendar on the RPI Union website.
 public class UnionEventParser extends BaseEventParser{
 
+	//constructor initializes the superclass which connects to the website and creates a JSoup document.
 	public UnionEventParser(String url) throws IOException{
 		super(url);
 	}
 
+	//parses all events from the website and adds them to a vector of events.
 	@Override
 	public Vector<Event> getEvents(){
 		Document doc = getDoc();
@@ -42,6 +45,7 @@ public class UnionEventParser extends BaseEventParser{
 		return events;
 	}
 
+	//parses events from substrings of the html document, and creates an Event object with the detected information.
 	private Event getEventfromString(String eventString, String date){
 		String time = eventString.substring(eventString.indexOf("Time:"));
 		time = time.substring(6, time.indexOf("<br>"));
@@ -57,6 +61,7 @@ public class UnionEventParser extends BaseEventParser{
 		Date startdate = new Date(0);
 		Date enddate = new Date(0);
 
+		//matching date and time patterns.
 		try{
 
 			Matcher multiMatcher = MultiDayTimePattern.matcher(time);
@@ -88,6 +93,7 @@ public class UnionEventParser extends BaseEventParser{
 		String location = eventString.substring(eventString.indexOf("Location: "));
 		location = location.substring(10, location.indexOf("<br>"));
 		
+		//creating the event and setting all the found information.
 		Event e = new Event(eventName, new Timestamp(startdate.getTime()), new Timestamp(enddate.getTime()));
 		e.setLocation(location);
 		e.setHost("RPI Union");
