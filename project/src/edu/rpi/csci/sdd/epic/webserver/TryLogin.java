@@ -57,6 +57,8 @@ public class TryLogin extends PostRequestProcessor
             currentUser.logout();
             return true;
         }
+
+        // As usual, print stack trace on exception.
         catch(Exception e)
         {
             e.printStackTrace();

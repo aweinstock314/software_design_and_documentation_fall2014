@@ -7,6 +7,7 @@ import edu.rpi.csci.sdd.epic.db.EventModel;
 // CreateEvent creates an event in the database with information pulled from a post request
 public class CreateEvent extends PostRequestProcessor
 {
+    // Creates stringified success page with message indicating the event was created.
     protected static final String successPage =
         "<html><head><title>Event created</title></head><body>Event created successfully.</body></html>";
 
