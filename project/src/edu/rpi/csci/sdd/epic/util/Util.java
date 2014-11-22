@@ -90,4 +90,28 @@ public class Util
     {
         return INVALID_XML_CHARS.matcher(s).replaceAll("");
     }
+
+    public static void asynchStreamCopy(final InputStream is, final OutputStream os) { asynchStreamCopy(is,os,0x1000); }
+    public static void asynchStreamCopy(final InputStream is, final OutputStream os, final int BUF_SIZE)
+    {
+        Thread t = new Thread(new Runnable(){
+            @Override public void run()
+            {
+                try
+                {
+                    int rc;
+                    byte[] buf = new byte[BUF_SIZE];
+                    while((rc = is.read(buf,0,BUF_SIZE)) != -1)
+                    {
+                        os.write(buf,0,rc);
+                        os.flush();
+                    }
+                    os.close();
+                }
+                catch(IOException ioe) {}
+            }
+        });
+        t.setDaemon(true);
+        t.start();
+    }
 }
