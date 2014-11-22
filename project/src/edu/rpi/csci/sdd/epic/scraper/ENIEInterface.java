@@ -5,9 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import edu.rpi.csci.sdd.epic.util.Util;
 
@@ -41,9 +38,9 @@ public class ENIEInterface
         dfp.close();
 
         Process p = Runtime.getRuntime().exec(makeENIEArgsList(filelist, dataFile.getParentFile()));
-        //asynchStreamCopy(System.in,p.getOutputStream());
-        //asynchStreamCopy(p.getInputStream(),System.out);
-        //asynchStreamCopy(p.getErrorStream(),System.err);
+        //Util.asynchStreamCopy(System.in,p.getOutputStream());
+        //Util.asynchStreamCopy(p.getInputStream(),System.out);
+        //Util.asynchStreamCopy(p.getErrorStream(),System.err);
         p.waitFor();
 
         File outputFile = new File(dataFile.getAbsolutePath()+".xml");
