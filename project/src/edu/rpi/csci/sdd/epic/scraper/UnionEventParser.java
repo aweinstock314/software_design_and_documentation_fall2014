@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import edu.rpi.csci.sdd.epic.db.EventModel;
 
 //allows for the scraping of the Union Event Calendar on the RPI Union website.
 public class UnionEventParser extends BaseEventParser{
@@ -26,6 +27,18 @@ public class UnionEventParser extends BaseEventParser{
 	@Override
 	public Vector<Event> getEvents(){
 		Document doc = getDoc();
+		//try{
+		//	String ENIEresults = ENIEInterface.runIETagger(doc.html());
+		//	Document enieResultDoc = Jsoup.parse(ENIEresults);
+		//	//System.out.println(enieResultDoc.html());
+		//	if(!enieResultDoc.select("event").isEmpty()){
+		//		System.out.println("+++++++++++++++++++++++++++");
+		//		System.out.println("EVENT FROM ENIE: " + enieResultDoc.select("event").first().html());
+		//		System.out.println("+++++++++++++++++++++++++++");
+		//	}
+		//}catch(Exception e){
+		//	System.err.println("error running the enie tagger");
+		//}
 
 		Vector<Event> events = new Vector<Event>();
 		Elements dayOfEvents = doc.select("a.dayLink");
@@ -47,6 +60,19 @@ public class UnionEventParser extends BaseEventParser{
 
 	//parses events from substrings of the html document, and creates an Event object with the detected information.
 	private Event getEventfromString(String eventString, String date){
+
+		try{
+			String ENIEresults = ENIEInterface.runIETagger(eventString + " " + date);
+			Document jsoupDoc = Jsoup.parse(ENIEresults);
+			if(!jsoupDoc.select("event").isEmpty()){
+//				System.out.println("EVENT FROM ENIE: " + jsoupDoc.select("event").first().html());
+			}
+//			System.out.println("\nENIE RESULTS:" + ENIEresults);
+
+		}catch(Exception e){
+			System.err.println("Error running ENIE IE Tagger");
+		}
+
 		String time = eventString.substring(eventString.indexOf("Time:"));
 		time = time.substring(6, time.indexOf("<br>"));
 		
@@ -99,6 +125,14 @@ public class UnionEventParser extends BaseEventParser{
 		e.setHost("RPI Union");
 		e.setSource("events.rpi.edu/union/main/showMainEnd.rdo");
 		e.setCreator("UnionEventsParser");
+		
+		try{
+//			System.out.println("TRYING TO ADD TAG");	
+			EventModel.addTag("union", eventName, startdate.getTime(), enddate.getTime());		
+		}catch(SQLException sqle){
+			System.err.println("unable to add tag due to SQL exception. in UnionScraper");
+		}
+
 		return e;
 
 	}

@@ -24,12 +24,15 @@ public class Scraper {
 	public Scraper() throws IOException, SQLException{
 		eventParsers = new Vector<BaseEventParser>();
 
+		//ENIEParser enieParser = new ENIEParser("http://www.troyrecord.com/community");
+		ENIEParser enieParser = new ENIEParser("http://www.troyrecord.com/articlelist?profile=4003056");
 		UnionEventParser unionParser = new UnionEventParser("http://events.rpi.edu/union/main/showMain.rdo");
 		TroyRecordEventParser troyParser = new TroyRecordEventParser("http://downtowntroy.org/special-events/events-calendar.html");
 		RPIMainEventParser rpiParser = new RPIMainEventParser("http://events.rpi.edu/webcache/v1.0/rssDays/7/list-rss/no--filter.rss");
 		eventParsers.add(troyParser);
 		eventParsers.add(unionParser);
 		eventParsers.add(rpiParser);
+		eventParsers.add(enieParser);
 	}
 	
 	//run each parser and store results in the database.
@@ -38,7 +41,7 @@ public class Scraper {
 			for(Event e : p.getEvents()){
 				//checks for duplicate events to make sure events are not accidently stored twice.
 				if(EventModel.checkForDuplicateEvent(e.getName().replace("\'", ""), e.getStart().getTime(), e.getEnd().getTime())){
-					System.out.println("DUPLICATE: " + e.getName());
+				//	System.out.println("DUPLICATE: " + e.getName());
 				}
 				//creates an event in the database.
 				else{

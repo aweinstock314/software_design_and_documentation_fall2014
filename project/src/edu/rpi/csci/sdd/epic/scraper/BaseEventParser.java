@@ -26,7 +26,7 @@ public class BaseEventParser{
 	//set up the connection, grab the html, parse to jsoup document
 	public BaseEventParser(String url) throws IOException{
 		srcUrl = url;
-		doc = Jsoup.connect(url).timeout(0).get();
+		doc = Jsoup.connect(url).userAgent("Chrome").cookie("auth","token").timeout(0).ignoreContentType(true).get();
 	}
 
 	//from the jsoup document, parses the events out and creates a vector of events.

@@ -90,4 +90,35 @@ public class EventModel
         finally { db.close(); }
         return Util.joinIterable(results, ", ", "[", "]");
     }
+    public static void addTag(String tag, String eventname, long starttime, long endtime) throws SQLException{
+	Connection db = DBUtil.getCredentialedDataSource().getConnection();
+	
+	//get the event id from the database.
+	
+	PreparedStatement stmt = null;
+	String query = "SELECT id FROM events WHERE name = ? AND starttime = ? AND endtime = ?";
+	stmt = db.prepareStatement(query);
+	stmt.setString(1, eventname);
+	stmt.setTimestamp(2, new Timestamp(starttime));
+	stmt.setTimestamp(3, new Timestamp(endtime));
+
+		
+	//System.out.println(query);
+	ResultSet rs = stmt.executeQuery();
+	int id = 0;
+
+	if(rs.next()){
+		id = rs.getInt(1);
+	}
+	else{
+		System.err.println("Unable to add tag to event: " + eventname + ". Event not found");
+		return;
+	}
+	
+	PreparedStatement stmt2 = db.prepareStatement("INSERT into event_tags (id, tag) VALUES (?,?)");
+	stmt2.setInt(1, id);
+	stmt2.setString(2, tag);
+
+	stmt2.executeUpdate();
+    }
 }
