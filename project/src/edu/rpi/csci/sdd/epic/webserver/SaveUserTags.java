@@ -11,22 +11,35 @@ import edu.rpi.csci.sdd.epic.db.DBUtil;
 
 public class SaveUserTags extends PostRequestProcessor
 {
-    // Print success page for creating account.
-    protected static final String successPage =
-        "<html><head><title>Account created</title></head><body>Account created successfully.</body></html>";
+    protected static final String successPage = "{success: true}";
+    protected static final String failurePage = "{success: false}";
 
-    // Post request processor used for signin/signout.
+    protected TryLogin tl;
+    public SaveUserTags(TryLogin x) { tl = x; }
+
+    // Post request processor used for persisting tags across logins
     protected String processPostRequest(Map<String, String> postPairs) throws Exception
     {
-        // blindly trust the user on their username (TODO: authentication, possibly send a session token instead of "SUCCESS"/"FAILURE")
+        // Receive a username/token pair (token prevents "vandalism"-ish forged tag-set requests)
         String username = URLDecoder.decode(postPairs.get("username"));
-        JSONArray filters = (JSONArray)JSONValue.parse(URLDecoder.decode(postPairs.get("filters")));
+        String token = URLDecoder.decode(postPairs.get("token"));
+        String expectedToken = tl.getUniqueToken(username);
+        if(token.equals(expectedToken))
+        {
+            JSONArray filters = (JSONArray)JSONValue.parse(URLDecoder.decode(postPairs.get("filters")));
 
-        // Print username + filters for debug purposes.
-        System.out.printf("Username: \"%s\"\nFilters: \"%s\"\n\n", username, filters);
+            // Print username + filters for debug purposes.
+            System.out.printf("Username: \"%s\"\nFilters: \"%s\"\n\n", username, filters);
 
-        // Set up tags and output success page.
-        AccountModel.setTagsForUser(DBUtil.getCredentialedDataSource(), username, new ArrayList<String>(filters));
-        return successPage;
+            // Set up tags and output success page.
+            AccountModel.setTagsForUser(DBUtil.getCredentialedDataSource(), username, new ArrayList<String>(filters));
+            return successPage;
+        }
+        else
+        {
+            System.out.printf("Received a potentially forged SaveUserTags request"+
+                "(received token \"%s\", expected \"%s\").\n", token, expectedToken);
+            return failurePage;
+        }
     }
 }

@@ -48,9 +48,10 @@ public class WebServer
                 // arrange for the "createevent" page to delegate to the CreateEvent POST processor
                 serv.createContext("/createevent", new CreateEvent());
                 // arrange for the "signin" page to delegate to the TryLogin POST processor
-                serv.createContext("/signin", new TryLogin());
+                TryLogin tl = new TryLogin();
+                serv.createContext("/signin", tl);
                 // arrange for the "save_user_tags" page to delegate to the SaveUserTags POST processor
-                serv.createContext("/save_user_tags", new SaveUserTags());
+                serv.createContext("/save_user_tags", new SaveUserTags(tl));
                 // announce to the console that this webserver is serving on the port it is serving on
                 System.out.printf("Bound to port %s\n", port);
             }

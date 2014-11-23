@@ -20,6 +20,11 @@ public class TryLogin extends PostRequestProcessor
     //protected static final String successPage = "SUCCESS";
     //protected static final String failurePage = "FAILURE";
 
+    public String getUniqueToken(String username)
+    {
+        //TODO: actual security/pseudorandomness (currently just unique, but easily^Wtrivially guessable)
+        return "Token{"+username+"}";
+    }
     protected String processPostRequest(Map<String, String> postPairs) throws Exception
     {
         // extract parameters from the provided map
@@ -30,7 +35,7 @@ public class TryLogin extends PostRequestProcessor
         {
             JSONObject response = new JSONObject();
             // TODO: return and store unique token, use for validation of set requests
-            response.put("unique_user_token", "0xdeadbeef");
+            response.put("unique_user_token", getUniqueToken(username));
             response.put("username", username);
             DataSource ds = DBUtil.getCredentialedDataSource();
             ArrayList<String> filters = AccountModel.getTagsForUser(ds, username);
