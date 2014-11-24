@@ -22,8 +22,8 @@ public class TryLogin extends PostRequestProcessor
 
     public String getUniqueToken(String username)
     {
-        //TODO: actual security/pseudorandomness (currently just unique, but easily^Wtrivially guessable)
-        return "Token{"+username+"}";
+        //TODO: cryptographically secure pseudorandom number generation
+        return username+Math.random();
     }
     protected String processPostRequest(Map<String, String> postPairs) throws Exception
     {
