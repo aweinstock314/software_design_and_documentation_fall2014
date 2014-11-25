@@ -37,9 +37,11 @@ public abstract class PostRequestProcessor implements HttpHandler
         {
             // add the (key, value) pair into the map
             String[] kv = kvp.split("=");
-            postPairs.put(kv[0], kv[1]);
+            String key = kv[0];
+            String val = (kv.length > 1) ? kv[1] : "";
+            postPairs.put(key, val);
             // if debugging output is enabled, log the (key, value) pair
-            if(DEBUG_MODE) { System.out.printf("\t\"%s\": \"%s\"\n", kv[0], kv[1]); }
+            if(DEBUG_MODE) { System.out.printf("\t\"%s\": \"%s\"\n", key, val); }
         }
         try
         {

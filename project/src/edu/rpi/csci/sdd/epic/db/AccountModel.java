@@ -76,14 +76,21 @@ public class AccountModel
         }
         finally { db.close(); }
     }
+    private static boolean validateCreds(String username, String password)
+    {
+        return (username != null) && (username.length() > 0) &&
+               (password != null) && (password.length() > 0);
+    }
+
     // createAccount, given account parameters, calls 
     //  GenericModel.insert to add account to "users" table in 
     //  database.  Values extracted from javascript create account 
     //  form via CreateAccount HttpHandler, using POST Values. may 
     //  also be entered via command-line create account tool - used 
     //  primarily in testing.
-    public static void createAccount(String id, boolean event_provider, String email, String username, String password) throws SQLException
+    public static boolean createAccount(String id, boolean event_provider, String email, String username, String password) throws SQLException
     {
+        if(!validateCreds(username, password)) { return false; }
         DataSource ds = DBUtil.getCredentialedDataSource();
         if(!userExists(ds, username))
         {
@@ -96,11 +103,12 @@ public class AccountModel
             vals.put("password", password);
             // insert the account data into the database
             GenericModel.insert(ds, "users", vals);
+            return true;
         }
         else
         {
-            // TODO: more elegant return mechanism?
-            throw new RuntimeException(String.format("User \"%s\" already exists in the database.", username));
+            //throw new RuntimeException(String.format("User \"%s\" already exists in the database.", username));
+            return false;
         }
     }
     // getUsersTable() returns all values in the users table. Used primarily in testing.
