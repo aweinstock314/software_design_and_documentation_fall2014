@@ -10,7 +10,6 @@ import edu.rpi.csci.sdd.epic.util.Util;
 
 public class ENIEInterface
 {
-    //private static String ENIE_DIR = "/home/avi/Documents/nlp_fall2014/nlp_project_mcguik2_weinsa/ENIE/";
     private static String ENIE_DIR = "/home/mcguik2/ENIE/";
     private static String[] makeENIEArgsList(File filelist, File ioDir)
     {

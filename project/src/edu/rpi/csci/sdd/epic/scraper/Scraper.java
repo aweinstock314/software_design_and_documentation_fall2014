@@ -29,9 +29,9 @@ public class Scraper {
 		UnionEventParser unionParser = new UnionEventParser("http://events.rpi.edu/union/main/showMain.rdo");
 		TroyRecordEventParser troyParser = new TroyRecordEventParser("http://downtowntroy.org/special-events/events-calendar.html");
 		RPIMainEventParser rpiParser = new RPIMainEventParser("http://events.rpi.edu/webcache/v1.0/rssDays/7/list-rss/no--filter.rss");
-		eventParsers.add(troyParser);
-		eventParsers.add(unionParser);
-		eventParsers.add(rpiParser);
+		//eventParsers.add(troyParser);
+		//eventParsers.add(unionParser);
+		//eventParsers.add(rpiParser);
 		eventParsers.add(enieParser);
 	}
 	
