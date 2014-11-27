@@ -8,8 +8,8 @@ import edu.rpi.csci.sdd.epic.db.AccountModel;
 public class CreateAccount extends PostRequestProcessor
 {
     // Generates brief html page displaying success.
-    protected static final String successPage = "{success: true}";
-    protected static final String failurePage = "{success: false}";
+    protected static final String successPage = "{\"success\": true}";
+    protected static final String failurePage = "{\"success\": false}";
 
     protected String processPostRequest(Map<String, String> postPairs) throws Exception
     {
@@ -20,10 +20,7 @@ public class CreateAccount extends PostRequestProcessor
         String username = postPairs.get("createaccount_username");
         String password = postPairs.get("createaccount_password");
         // create the account
-        if(AccountModel.createAccount(id, event_provider, email_address, username, password))
-        {
-            return successPage;
-        }
-        else { return failurePage; }
+        boolean success = AccountModel.createAccount(id, event_provider, email_address, username, password);
+        return success ? successPage : failurePage;
     }
 }

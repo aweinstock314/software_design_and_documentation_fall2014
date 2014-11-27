@@ -242,6 +242,34 @@ function check_form(form) {
 	return false;
 }
 
+function do_signup(form) {
+	var fields = {
+		createaccount_username: form.elements['createaccount_username'].value,
+		createaccount_password: form.elements['createaccount_password'].value,
+		createaccount_event_provider: form.elements['createaccount_event_provider'].value,
+	};
+	console.log(JSON.stringify(fields));
+	$.ajax({
+		url: "/createaccount",
+		type: "POST",
+		data: fields,
+		dataType: "json",
+		async: true,
+		mimeType: "text/html",
+		success: function(response) {
+			console.log(response);
+			if(response['success']) {
+				// TODO: possible auto-login?
+				alert("Account created successfully.");
+			}
+			else {
+				show_error_box("Failed to create account.");
+			}
+		},
+	});
+	return false;
+}
+
 // Saves tags to update user preferences.
 function save_user_tags(filters) {
 
@@ -250,6 +278,7 @@ function save_user_tags(filters) {
 		filterstr = JSON.stringify(filters);
 		var fields = {
 			username: global_username,
+			token: global_user_token,
 			filters: filterstr
 		};
 		$.ajax({
@@ -326,14 +355,14 @@ function hide_error_box() {
 				Create Account
 			</div>
 			<hr class="simple_margin"/>
-			<form class="form_low_margins" method="post" action="/createaccount">
+			<form class="form_low_margins" onSubmit="return do_signup(this)">
 				<input type="text" class="text_input username" name="createaccount_username" placeholder="Username"/>
 				<input type="password" class="text_input password" name="createaccount_password" placeholder="Password"/>
 				<input type="checkbox" class="epic_checkbox" name="createaccount_event_provider">Are you an event provider?</input>
 				<button class="left_button" onclick="swap_box('signin_box', 'account_create_box'); return false;"> 
 					Cancel
 				</button>
-				<button class="right_button">
+				<button class="right_button" type="submit">
 					Submit
 				</button>
 			</form>
