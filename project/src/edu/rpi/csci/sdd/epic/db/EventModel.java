@@ -28,21 +28,20 @@ public class EventModel
         vals.put("on_campus", on_campus);
         GenericModel.insert(DBUtil.getCredentialedDataSource(), "events", vals);
     }
-	//checks if an event already exists in the database to ensure that no duplicate events are created.
-	public static boolean checkForDuplicateEvent(String name, long starttime, long endtime) throws SQLException
-	{
-		Connection db = DBUtil.getCredentialedDataSource().getConnection();
-		PreparedStatement stmt = null;
-		String query = "SELECT * FROM events WHERE name = ? AND starttime = ? AND endtime = ?";
-		stmt = db.prepareStatement(query);
-		stmt.setString(1, name);
-		stmt.setTimestamp(2, new Timestamp(starttime));
-		stmt.setTimestamp(3, new Timestamp(endtime));
-		//System.out.println(query);
-		ResultSet rs = stmt.executeQuery();
-		if(rs.next()) return true;
-		else return false;
-	} 
+    //checks if an event already exists in the database to ensure that no duplicate events are created.
+    public static boolean checkForDuplicateEvent(String name, long starttime, long endtime) throws SQLException
+    {
+        Connection db = DBUtil.getCredentialedDataSource().getConnection();
+        PreparedStatement stmt = null;
+        String query = "SELECT * FROM events WHERE name = ? AND starttime = ? AND endtime = ?";
+        stmt = db.prepareStatement(query);
+        stmt.setString(1, name);
+        stmt.setTimestamp(2, new Timestamp(starttime));
+        stmt.setTimestamp(3, new Timestamp(endtime));
+        //System.out.println(query);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next();
+    }
     //gets all the events as a JavaScript array to use in the User Interface.
     public static String getEventsAsJSArray() throws SQLException
     {
