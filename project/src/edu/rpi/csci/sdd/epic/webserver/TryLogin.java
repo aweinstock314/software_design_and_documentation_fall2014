@@ -1,7 +1,9 @@
 package edu.rpi.csci.sdd.epic.webserver;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 import javax.sql.DataSource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -20,10 +22,19 @@ public class TryLogin extends PostRequestProcessor
     //protected static final String successPage = "SUCCESS";
     //protected static final String failurePage = "FAILURE";
 
-    public String getUniqueToken(String username)
+    private static SecureRandom rand = new SecureRandom();
+    private Map<String, String> csrfTokens = new HashMap<String, String>();
+
+    public String getCSRFToken(String username)
     {
-        //TODO: cryptographically secure pseudorandom number generation
-        return username+Math.random();
+        if(!csrfTokens.containsKey(username))
+        {
+            byte[] bytes = new byte[4];
+            rand.nextBytes(bytes);
+            String token = String.format("%s;%02x%02x%02x%02x", username, bytes[0], bytes[1], bytes[2], bytes[3]);
+            csrfTokens.put(username, token);
+        }
+        return csrfTokens.get(username);
     }
     protected String processPostRequest(Map<String, String> postPairs) throws Exception
     {
@@ -35,7 +46,7 @@ public class TryLogin extends PostRequestProcessor
         {
             JSONObject response = new JSONObject();
             // TODO: return and store unique token, use for validation of set requests
-            response.put("unique_user_token", getUniqueToken(username));
+            response.put("unique_user_token", getCSRFToken(username));
             response.put("username", username);
             DataSource ds = DBUtil.getCredentialedDataSource();
             ArrayList<String> filters = AccountModel.getTagsForUser(ds, username);
