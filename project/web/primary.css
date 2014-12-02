@@ -42,6 +42,14 @@
 	background-color: pink;
 }
 
+.success_box {
+	border: 1px green solid;
+	margin: 5px;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: #00FF00;
+}
+
 .account_create_box {
 	border: 1px #AED0EA solid;
 	margin: 5px;

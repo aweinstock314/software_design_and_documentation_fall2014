@@ -235,7 +235,7 @@ function check_form(form) {
 				$("#username_text").text(global_username);
 
 				// hide error if displayed.
-				hide_error_box();
+				hide_boxes();
 			}
 			// Display error if call fails.
 			else {
@@ -268,6 +268,38 @@ function do_signup(form) {
 			}
 			else {
 				show_error_box("Failed to create account.");
+			}
+		},
+	});
+	return false;
+}
+
+function do_createevent(form) {
+	var fields = {
+		name: form.elements['name'].value,
+		host: form.elements['host'].value,
+		source: form.elements['source'].value,
+		starttime: form.elements['starttime'].value,
+		endtime: form.elements['endtime'].value,
+		location: form.elements['location'].value,
+		recurring: form.elements['recurring'].value,
+		oncampus: form.elements['oncampus'].value,
+	};
+	console.log(JSON.stringify(fields));
+	$.ajax({
+		url: "/createevent",
+		type: "POST",
+		data: fields,
+		dataType: "json",
+		async: true,
+		mimeType: "text/html",
+		success: function(response) {
+			console.log(response);
+			if(response['success']) {
+				show_success_box("Event created successfully");
+			}
+			else {
+				show_error_box("Failed to create event.");
 			}
 		},
 	});
@@ -307,14 +339,24 @@ function signout() {
 
 // display error box; add appropriate string.
 function show_error_box(text) {
+	hide_boxes();
 	$('#error_box').show();
 	$('#error_box').text(text);
 }
 
-// hide error box; empty its text
-function hide_error_box() {
+// display success box; add appropriate string.
+function show_success_box(text) {
+	hide_boxes();
+	$('#success_box').show();
+	$('#success_box').text(text);
+}
+
+// hide error and success boxes; empty its text
+function hide_boxes() {
 	$('#error_box').hide();
 	$('#error_box').text('');
+	$('#success_box').hide();
+	$('#success_box').text('');
 }
 
 </script>
@@ -336,8 +378,8 @@ function hide_error_box() {
 </head>
 <body onload="calendar_init()">
 	<div class="left_bar">
-		<div id="error_box" class="error_box hidden">
-		</div>
+		<div id="error_box" class="error_box hidden"></div>
+		<div id="success_box" class="success_box hidden"></div>
 		<div id="signin_box" class="signin_box">
 			<div class="title_1">
 				Sign In
@@ -393,7 +435,7 @@ function hide_error_box() {
 				Create Event
 			</div>
 			<hr class="simple_margin"/>
-			<form method="post" action="/createevent">
+			<form method="post" onSubmit="return do_createevent(this);">
 				<input type="text" class="text_input username" name="name" placeholder="Name" /><br />
 				<input type="text" class="text_input username" name="host" placeholder="Host" /><br />
 				<input type="text" class="text_input username" name="source" placeholder="Source"/><br />
