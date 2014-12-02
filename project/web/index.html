@@ -225,7 +225,11 @@ function check_form(form) {
 				swap_box("signin_box", "signed_in_box");
 				if (response['event_provider'] == false) {
 					$('#create_event_button').hide();
-				}				global_username = response['username'];
+				}
+				else {
+					$('#create_event_button').show();
+				}
+				global_username = response['username'];
 				global_user_token = response['unique_user_token'];
 				set_tags_list(response['stored_tags']);
 				$("#username_text").text(global_username);
