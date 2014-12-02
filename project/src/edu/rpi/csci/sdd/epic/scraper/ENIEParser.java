@@ -18,16 +18,16 @@ import edu.rpi.csci.sdd.epic.db.EventModel;
 public class ENIEParser extends BaseEventParser{
 
 	
-	public ENIEParser(String url) throws IOException{
+	public ENIEParser(String url) throws IOException {
 		super(url);
 	}
 
 	//from the jsoup document, parses the events out and creates a vector of events.
-	public Vector<Event> getEvents(){
+	public Vector<Event> getEvents() {
 	
 		Document jsoupDoc = getDoc();	
 
-		try{
+		try {
 			String ENIEresults = ENIEInterface.runIETagger(jsoupDoc.html());
 			Document enieResultDoc = Jsoup.parse(ENIEresults);
 			System.out.println(enieResultDoc.html());
@@ -38,7 +38,7 @@ public class ENIEParser extends BaseEventParser{
 				}
 				System.out.println("+++++++++++++++++++++++++++");
 			}
-		}catch(Exception e){
+		}catch(Exception e) {
 			System.err.println("error running the enie tagger");
 		}
 

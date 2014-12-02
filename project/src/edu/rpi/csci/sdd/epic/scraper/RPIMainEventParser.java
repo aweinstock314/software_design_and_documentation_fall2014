@@ -15,21 +15,21 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 //scrapes events from the RPI main academic calendar.
-public class RPIMainEventParser extends BaseEventParser{
+public class RPIMainEventParser extends BaseEventParser {
 	
 	//The constructor for the parser that initializes the values in the superclass
-	public RPIMainEventParser(String url) throws IOException{
+	public RPIMainEventParser(String url) throws IOException {
 		super(url);
 	}
 
 	//gets all the events from the website.
 	@Override
-	public Vector<Event> getEvents(){
+	public Vector<Event> getEvents() {
 		Document doc = getDoc();
 		Vector<Event> events = new Vector<Event>();
 
 		Elements items = doc.select("item");
-		for(Element e : items){
+		for(Element e : items) {
 			//safeguard so unparseable events are not added.
 			if(getEventFromElement(e)!=null)
 				events.add(getEventFromElement(e));
@@ -39,7 +39,7 @@ public class RPIMainEventParser extends BaseEventParser{
 	}
 
 	//parses out the event information and creates an Event object based on a given html element.
-	public Event getEventFromElement(Element elem){
+	public Event getEventFromElement(Element elem) {
 
 		//parsing out the name and location of the event.
 		String name = elem.select("title").first().html();
@@ -49,7 +49,7 @@ public class RPIMainEventParser extends BaseEventParser{
 		//limiting the length of the name so it can be stored in the database.
 		if(name.length()>80) name = name.substring(0,79);
 
-		try{
+		try {
 			//Regex patterns to match the start dates and times
 			Pattern datetimePattern = Pattern.compile("(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), (January|February|March|April|May|June|July|August|September|October|November|December) ([0-9]|[0-2][0-9]|3[0-1]), (2[0-9][0-9][0-9]) ([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9] (AM|PM) - ([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9] (AM|PM)");
 			Matcher datetimeMatcher = datetimePattern.matcher(elem.html());
@@ -66,18 +66,18 @@ public class RPIMainEventParser extends BaseEventParser{
 			String endtime = "";
 	
 			//parsing out the start dates and times for the event from the website.
-			if(datetimeMatcher.find()){
+			if(datetimeMatcher.find()) {
 				//System.out.println("found a match");
 				datetime = datetimeMatcher.group();
 				Matcher dateMatcher = datePattern.matcher(datetime);
-				if(dateMatcher.find()){
+				if(dateMatcher.find()) {
 					date = dateMatcher.group();
 				}
 				Matcher timeMatcher = timePattern.matcher(datetime);
-				if(timeMatcher.find()){
+				if(timeMatcher.find()) {
 					starttime = timeMatcher.group();
 				}
-				if(timeMatcher.find()){
+				if(timeMatcher.find()) {
 					endtime = timeMatcher.group();			
 				}
 
@@ -94,12 +94,12 @@ public class RPIMainEventParser extends BaseEventParser{
 				return event;
 			
 			}
-			else{
+			else {
 				//for currently unparseable events.
 				return null;
 			}
 
-		}catch(ParseException e){
+		} catch(ParseException e) {
 			System.err.println("There was an error parsing event: " + name);
 		}
 

@@ -1,4 +1,5 @@
 package edu.rpi.csci.sdd.epic.scraper;
+
 import java.io.*;
 import java.util.Date;
 import java.util.Vector;
@@ -19,24 +20,24 @@ import org.jsoup.select.Elements;
 //the base class for any event parser
 public class BaseEventParser{
 
-	private String srcUrl;
-	private Document doc;
-	private String scraperName;
+private String srcUrl;
+private Document doc;
+private String scraperName;
 
-	//set up the connection, grab the html, parse to jsoup document
-	public BaseEventParser(String url) throws IOException{
+//set up the connection, grab the html, parse to jsoup document
+	public BaseEventParser(String url) throws IOException {
 		srcUrl = url;
 		doc = Jsoup.connect(url).userAgent("Chrome").cookie("auth","token").timeout(0).ignoreContentType(true).get();
 	}
 
 	//from the jsoup document, parses the events out and creates a vector of events.
-	public Vector<Event> getEvents(){
+	public Vector<Event> getEvents() {
 		Vector<Event> events = new Vector<Event>();
 		return events;
 	}
 
 	//get the Jsoup Document
-	protected Document getDoc(){
+	protected Document getDoc() {
 		return doc;
 	}	
 

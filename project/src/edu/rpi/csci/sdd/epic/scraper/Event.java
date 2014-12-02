@@ -17,7 +17,7 @@ public class Event {
 	private String creator;
 	
 	//create the event with the given values for required variables, and the default values for the optional variables.
-	public Event(String name, Timestamp start, Timestamp end){
+	public Event(String name, Timestamp start, Timestamp end) {
 		//required variables
 		this.name = name;
 		this.start = start;
@@ -44,61 +44,61 @@ public class Event {
 	}
 	
 	//start and end times and dates for the event.
-	public Timestamp getStart(){
+	public Timestamp getStart() {
 		return start;
 	}
 
-	public Timestamp getEnd(){
+	public Timestamp getEnd() {
 		return end;
 	}
 
 	//title of the event.
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 	
 	//the organization that is hosting the event.
-	public void setHost(String host){
+	public void setHost(String host) {
 		 this.host = host;
 	}
 
-	public String getHost(){
+	public String getHost() {
 		return host;
 	}
 
 	//whether the event is recurring
-	public void setRecurring(boolean b){
+	public void setRecurring(boolean b) {
 		this.recurring = b;
 	}
 
-	public boolean getRecurring(){
+	public boolean getRecurring() {
 		return recurring;
 	}
 	
 	//whether the event is on or off RPI campus
-	public void setOnCampus(boolean b){
+	public void setOnCampus(boolean b) {
 		this.on_campus = b;
 	}
 
-	public boolean getOnCampus(){
+	public boolean getOnCampus() {
 		return on_campus;
 	}
 
 	//the source website of the event that the scraper used.
-	public void setSource(String source){
+	public void setSource(String source) {
 		this.source = source;
 	}
 
-	public String getSource(){
+	public String getSource() {
 		return source;
 	}
 
 	//the creator of the event if a user created it.
-	public void setCreator(String creator){
+	public void setCreator(String creator) {
 		this.creator = creator;
 	}
 
-	public String getCreator(){
+	public String getCreator() {
 		return creator;
 	}
 	

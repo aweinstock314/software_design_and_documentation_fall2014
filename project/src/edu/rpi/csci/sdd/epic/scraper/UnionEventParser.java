@@ -1,4 +1,5 @@
 package edu.rpi.csci.sdd.epic.scraper;
+
 import java.io.*;
 import java.util.Date;
 import java.util.Vector;
@@ -16,42 +17,29 @@ import org.jsoup.select.Elements;
 import edu.rpi.csci.sdd.epic.db.EventModel;
 
 //allows for the scraping of the Union Event Calendar on the RPI Union website.
-public class UnionEventParser extends BaseEventParser{
+public class UnionEventParser extends BaseEventParser {
 
 	//constructor initializes the superclass which connects to the website and creates a JSoup document.
-	public UnionEventParser(String url) throws IOException{
+	public UnionEventParser(String url) throws IOException {
 		super(url);
 	}
 
 	//parses all events from the website and adds them to a vector of events.
 	@Override
-	public Vector<Event> getEvents(){
+	public Vector<Event> getEvents() {
 		Document doc = getDoc();
-		//try{
-		//	String ENIEresults = ENIEInterface.runIETagger(doc.html());
-		//	Document enieResultDoc = Jsoup.parse(ENIEresults);
-		//	//System.out.println(enieResultDoc.html());
-		//	if(!enieResultDoc.select("event").isEmpty()){
-		//		System.out.println("+++++++++++++++++++++++++++");
-		//		System.out.println("EVENT FROM ENIE: " + enieResultDoc.select("event").first().html());
-		//		System.out.println("+++++++++++++++++++++++++++");
-		//	}
-		//}catch(Exception e){
-		//	System.err.println("error running the enie tagger");
-		//}
-
 		Vector<Event> events = new Vector<Event>();
 		Elements dayOfEvents = doc.select("a.dayLink");
 
-		for(Element day : dayOfEvents){
+		for(Element day : dayOfEvents) {
 			//get the date (in a different location than the rest of the event info.
 			String date = day.attr("href");
 			date = date.substring(date.indexOf("date=")+5);
 
-			for(Element event : day.parent().select("a.eventLinkA")){
+			for(Element event : day.parent().select("a.eventLinkA")) {
 				events.add(getEventfromString(event.select("span").first().html(), date));
 			}
-			for(Element event : day.parent().select("a.eventLinkB")){
+			for(Element event : day.parent().select("a.eventLinkB")) {
 				events.add(getEventfromString(event.select("span").first().html(), date));
 			}
 		}
@@ -59,19 +47,7 @@ public class UnionEventParser extends BaseEventParser{
 	}
 
 	//parses events from substrings of the html document, and creates an Event object with the detected information.
-	private Event getEventfromString(String eventString, String date){
-
-		try{
-			String ENIEresults = ENIEInterface.runIETagger(eventString + " " + date);
-			Document jsoupDoc = Jsoup.parse(ENIEresults);
-			if(!jsoupDoc.select("event").isEmpty()){
-//				System.out.println("EVENT FROM ENIE: " + jsoupDoc.select("event").first().html());
-			}
-//			System.out.println("\nENIE RESULTS:" + ENIEresults);
-
-		}catch(Exception e){
-			System.err.println("Error running ENIE IE Tagger");
-		}
+	private Event getEventfromString(String eventString, String date) {
 
 		String time = eventString.substring(eventString.indexOf("Time:"));
 		time = time.substring(6, time.indexOf("<br>"));
@@ -88,29 +64,29 @@ public class UnionEventParser extends BaseEventParser{
 		Date enddate = new Date(0);
 
 		//matching date and time patterns.
-		try{
+		try {
 
 			Matcher multiMatcher = MultiDayTimePattern.matcher(time);
-			if(multiMatcher.find()){
+			if(multiMatcher.find()) {
 				multiday = true;
 				startdate = multidayformat.parse(date.substring(0, 4) + " " + multiMatcher.group());
 			}
-			if(multiMatcher.find()){
+			if(multiMatcher.find()) {
 				enddate = multidayformat.parse(date.substring(0, 4) + " " + multiMatcher.group());
 			}
 		
 			//this will match if it is not a multi-day event, and the time is added to the date to create a timestamp.
 			Matcher singleMatcher = SingleDayTimePattern.matcher(time);
-			if(!multiday){
-				if(singleMatcher.find()){
+			if(!multiday) {
+				if(singleMatcher.find()) {
 					startdate = singledayformat.parse(date + " " + singleMatcher.group());
 				}
-				if(singleMatcher.find()){
+				if(singleMatcher.find()) {
 					enddate = singledayformat.parse(date + " " + singleMatcher.group());
 				}
 			}
 	
-		}catch(ParseException e){
+		}catch(ParseException e) {
 			System.err.println("Unable to parse out timestamp for event.");
 		}
 		
@@ -126,10 +102,9 @@ public class UnionEventParser extends BaseEventParser{
 		e.setSource("events.rpi.edu/union/main/showMainEnd.rdo");
 		e.setCreator("UnionEventsParser");
 		
-		try{
-//			System.out.println("TRYING TO ADD TAG");	
+		try {
 			EventModel.addTag("union", eventName, startdate.getTime(), enddate.getTime());		
-		}catch(SQLException sqle){
+		}catch(SQLException sqle) {
 			System.err.println("unable to add tag due to SQL exception. in UnionScraper");
 		}
 

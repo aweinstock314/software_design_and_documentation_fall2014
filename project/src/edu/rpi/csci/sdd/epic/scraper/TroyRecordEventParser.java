@@ -1,4 +1,5 @@
 package edu.rpi.csci.sdd.epic.scraper;
+
 import java.io.*;
 import java.util.Date;
 import java.util.Vector;
@@ -15,23 +16,23 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 //This parser allows the scraping of the Downtown Troy BID event calendar on their website.
-public class TroyRecordEventParser extends BaseEventParser{
+public class TroyRecordEventParser extends BaseEventParser {
 
 	//constructor initializing the superclass, which connects to the url and creates a JSoup document.
-	public TroyRecordEventParser(String url) throws IOException{
+	public TroyRecordEventParser(String url) throws IOException {
 		super(url);
 	}
 
 	//Overrides the getEvents in BaseEventParser. Parses all events from the Troy BID calendar into a vector.
 	@Override
-	public Vector<Event> getEvents(){
+	public Vector<Event> getEvents() {
 		Document doc = getDoc();
 
 		Vector<Event> events = new Vector<Event>();
 		//System.out.println(doc.html());
 
 		Elements eventMiddles = doc.select("div.eventmiddle");
-		for(Element e : eventMiddles){
+		for(Element e : eventMiddles) {
 			//System.out.println(e.html());	
 			
 			Event event = getEventFromElement(e);
@@ -42,7 +43,7 @@ public class TroyRecordEventParser extends BaseEventParser{
 	}
 
 	//Parses out all event information and creates an Event object from the html element.
-	public Event getEventFromElement(Element e){
+	public Event getEventFromElement(Element e) {
 		//System.out.println("\nEVENTMIDDLE:\n"+eventStr);
 		
 		//doc.select(meta[itemprop="url"]).first().attr(content);
@@ -50,7 +51,7 @@ public class TroyRecordEventParser extends BaseEventParser{
 		String name = e.select("meta[itemprop=\"name\"]").first().attr("content");
 		//System.out.println(name);
 
-		try{
+		try {
 			Document inner_url_doc = Jsoup.connect(url).timeout(0).get();
 			String event_info = inner_url_doc.select("div.jcal_categories").first().html();
 
@@ -66,13 +67,13 @@ public class TroyRecordEventParser extends BaseEventParser{
 			//try to match date_pattern
 			Matcher date_matcher = date_pattern.matcher(event_info);
 			Matcher time_matcher = time_pattern.matcher(event_info);
-			if(date_matcher.find()){
+			if(date_matcher.find()) {
 				date = date_matcher.group();
 			}
-			if(time_matcher.find()){
+			if(time_matcher.find()) {
 				start_time = time_matcher.group();
 			}
-			if(time_matcher.find()){
+			if(time_matcher.find()) {
 				end_time = time_matcher.group();
 			}
 
@@ -91,9 +92,9 @@ public class TroyRecordEventParser extends BaseEventParser{
 			return event;
 			
 	
-		}catch(IOException exc){
+		}catch(IOException exc) {
 			System.err.println("error connecting and getting information from: " + url);
-		}catch(ParseException p){
+		}catch(ParseException p) {
 			System.err.println("error trying to parse out the date and time from: " + url);
 		}
 
