@@ -264,7 +264,7 @@ function do_signup(form) {
 			console.log(response);
 			if(response['success']) {
 				// TODO: possible auto-login?
-				alert("Account created successfully.");
+				show_success_box("Account created successfully.");
 			}
 			else {
 				show_error_box("Failed to create account.");

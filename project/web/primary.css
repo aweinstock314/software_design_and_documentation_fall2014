@@ -43,11 +43,11 @@
 }
 
 .success_box {
-	border: 1px green solid;
+	border: 2px #20D020 solid;
 	margin: 5px;
 	padding: 5px;
 	border-radius: 5px;
-	background-color: #00FF00;
+	background-color: #B0FFB0;
 }
 
 .account_create_box {
