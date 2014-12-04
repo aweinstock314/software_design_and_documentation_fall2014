@@ -14,6 +14,7 @@ import org.json.simple.JSONValue;
 
 import edu.rpi.csci.sdd.epic.db.AccountModel;
 import edu.rpi.csci.sdd.epic.db.DBUtil;
+import edu.rpi.csci.sdd.epic.util.Util;
 
 // TryLogin tries to login with information pulled from a post request
 public class TryLogin extends PostRequestProcessor
@@ -22,16 +23,13 @@ public class TryLogin extends PostRequestProcessor
     //protected static final String successPage = "SUCCESS";
     //protected static final String failurePage = "FAILURE";
 
-    private static SecureRandom rand = new SecureRandom();
     private Map<String, String> csrfTokens = new HashMap<String, String>();
 
     public String getCSRFToken(String username)
     {
         if(!csrfTokens.containsKey(username))
         {
-            byte[] bytes = new byte[4];
-            rand.nextBytes(bytes);
-            String token = String.format("%s;%02x%02x%02x%02x", username, bytes[0], bytes[1], bytes[2], bytes[3]);
+            String token = String.format("%s;%s", username, Util.getCSPRNGQuadbyte());
             csrfTokens.put(username, token);
         }
         return csrfTokens.get(username);

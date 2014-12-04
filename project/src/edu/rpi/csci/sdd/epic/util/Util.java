@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.lang.Iterable;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -114,5 +115,13 @@ public class Util
         });
         t.setDaemon(true);
         t.start();
+    }
+
+    private static SecureRandom csprng = new SecureRandom();
+    public static String getCSPRNGQuadbyte()
+    {
+        byte[] bytes = new byte[4];
+        csprng.nextBytes(bytes);
+        return String.format("%02x%02x%02x%02x", bytes[0], bytes[1], bytes[2], bytes[3]);
     }
 }
