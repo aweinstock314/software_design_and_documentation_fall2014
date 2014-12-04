@@ -23,6 +23,7 @@
 var filters = [];
 var events = <!--INSERT-EVENTS-DB-AS-JS-ARRAY-->;
 var global_username = null;
+var global_user_token = null;
 var global_event_create = null;
 
 // Initializes calendar on page load.
@@ -98,11 +99,14 @@ function add_event(event_to_add) {
 		allday = true;
 	}
 
+	// because EST and GMT are 5 hours apart
+	var TIMEZONE_HACK_CONSTANT = 5 * 60 * 60 * 1000;
+
 	// Add event to calendar!
 	$('#calendar').fullCalendar('renderEvent', {
 		title: event_to_add.name,
-		start: event_to_add.starttime,
-		end: event_to_add.endtime,
+		start: event_to_add.starttime - TIMEZONE_HACK_CONSTANT,
+		end: event_to_add.endtime - TIMEZONE_HACK_CONSTANT,
 		allDay: allday
 	}, true)
 }
@@ -192,8 +196,7 @@ function calendar_clear() {
 }
 
 // Used to sign user in. 
-function check_form(form) {
-
+function do_signin(form) {
 	// Show error if username or password is blank.
 	if (form.elements["username"].value == form.elements["username"].defaultValue) {
 		show_error_box("Please enter your username.");		
@@ -209,6 +212,11 @@ function check_form(form) {
 		password: form.elements["password"].value,
 	};
 
+	handle_signin(fields);
+	return false;
+}
+
+function handle_signin(fields) {
 	// Sign in + validate user.
 	$.ajax({
 		url: "/signin",
@@ -243,7 +251,6 @@ function check_form(form) {
 			}
 		},
 	});
-	return false;
 }
 
 function do_signup(form) {
@@ -263,8 +270,12 @@ function do_signup(form) {
 		success: function(response) {
 			console.log(response);
 			if(response['success']) {
-				// TODO: possible auto-login?
 				show_success_box("Account created successfully.");
+				// TODO: possible auto-login?
+				/*handle_signin({
+					username: fields['createaccount_username'],
+					password: fields['createaccount_password'],
+				});*/
 			}
 			else {
 				show_error_box("Failed to create account.");
@@ -335,6 +346,7 @@ function save_user_tags(filters) {
 function signout() {
 	swap_box("signin_box", "signed_in_box");
 	global_username = null;
+	global_user_token = null;
 }
 
 // display error box; add appropriate string.
@@ -385,7 +397,7 @@ function hide_boxes() {
 				Sign In
 			</div>
 			<hr class="simple_margin"/>
-			<form id="signin_form" class="form_low_margins" onSubmit="return check_form(this)">
+			<form id="signin_form" class="form_low_margins" onSubmit="return do_signin(this)">
 				<input name="username" id="signin_username" type="text" class="text_input username" placeholder="Username"/>
 				<input name="password" id="signin_username" type="password" class="text_input password" placeholder="Password"/>
 				<button class="left_button" type="submit">
